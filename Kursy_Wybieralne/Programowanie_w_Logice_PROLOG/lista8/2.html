@@ -1,0 +1,30 @@
+<!-- uruchamiac: kompilujemy queens.pl, a potem pwp_files('2.html','queens.html'). -->
+<!-- co do tych pwp: sa to po prostu 'atrybuty' w elementach html (wiec jest skladniowo zgodne) przetwarzane przez pwp_files. Uzycie: 
+pwp:ask - wykonuje 'Goal' prologa - podstawianie zmiennych, uzywanie predykatow, zczytywanie faktow. Jezeli cel zawodzi, to element sie nie tworzy,
+pwp:use - wkleja wartosc zmiennej. -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="utf-8" />
+	<title>Queens</title>
+	<meta name="generator" content="BBEdit 11.5" />
+</head>
+<body pwp:ask="ensure_loaded(queens), size(X), once(queens(X,Y))">      <!--Ladujemy queens, zczytujemy size do X i znajdujemy jedna permutacje hetmanow o rozmiarze X -->
+	
+<h1>Queens problem</h1>
+
+<h2>
+	Solution for N = <span pwp:use="X"/>                                <!-- wypisujemy X -->
+</h2>
+	
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr pwp:ask="member(W,Y)">                                          <!-- iteracja po wierszach - kazdy nawrot bedzie nam dodawac kolejny element tr (table row) do pliku html-->
+        <td pwp:ask="between(1,X,K)">                                   <!-- for(K=1;K<=X,K++) iteracja po kolumnach - kazdy nawrot bedzie nam dodawac kolejny element td (standard cell) do pliku html-->
+            <img pwp:ask="K =:= W" src="pic/queen.png"/>                <!--Sprawdz, czy w tej kolumnie ma byc hetman. Jezeli tak, to wstawi sie obrazek queen.png-->
+            <img pwp:ask="K =\= W" src="pic/empty.png"/>                <!-- Jezeli nie jest, to wstawi sie obrazek empty.png -->
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

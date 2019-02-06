@@ -1,0 +1,17 @@
+Laboratorium: Lista zadañ 1
+termin 2018.04.06
+
+Rozwi¹zaniami zadañ maj¹ byæ programy napisane w jêzyku Javascript dzia³aj¹ce na stronach HTML. Zarówno plik html oraz programy w Javascript maj¹ zostaæ w podanym terminie umieszczone w repozytorium svn. Dla pliku html nale¿y ustawiæ w³asnoœæ svn:mime-type na wartoœæ text/html;charset=UTF-8. Mo¿na to zrobiæ poleceniem:
+
+svn propset svn:mime-type 'text/html;charset=UTF-8' plik.html
+
+(Po przes³aniu pliku do swojego repozytorium, sprawdŸ czy dany plik html poprawnie siê wyœwietla i uruchamia w przegl¹darce internetowej.) 
+
+Grafika ¿ó³wia. (10 p.)
+Zaimplementowaæ procedury grafiki ¿ó³wia na elemencie <canvas>. Parametry ¿ó³wia, takie jak po³o¿enie i orientacja na p³aszczyŸnie maj¹ byæ pamiêtane jako liczby rzeczywiste. Przyjmij, ¿e okno graficzne reprezentuje prostok¹t [minX, maxX] x [minY, maxY] i widoczne s¹ jedynie fragmenty œladów pozostawione w tym prostok¹cie. Parametry minX, maxX, minY, maxY s¹ zapisywane jako pewne parametry niezale¿ne od rozmiaru okna w pikselach.  Przeliczaj wspó³rzêdne rzeczywiste na wspó³rzêdne pikseli tak aby wspó³rzêdna X ros³a w prawo a wspó³rzêdna Y ros³a w górê. Zaimplementuj jeden program wykonuj¹cy kilka rysunków demonstracyjnych (np. wielok¹ty foremne w ró¿nych kolorach) z wykorzystaniem swoich procedur, oraz drugi program na innej stronie HTML, zawieraj¹cej okienko tekstowe, w którym u¿ytkownik mo¿e wpisywaæ interaktywnie polecenia dla ¿ó³wia na ekranie. 
+P³atek Kocha. (10 p.)
+Wykorzystuj¹c grafikê ¿ó³wia z rozwi¹zania poprzedniego zadania napisz program rysuj¹cy na ekranie krzyw¹ Kocha  dowolnego stopnia. Zrób to tak, aby u¿ytkownik móg³ zmieniaæ stopieñ rysowanej krzywej. 
+P³atek Kocha w SVG. (10 p.) 
+Wykorzystaj SVG do rysowania krzywej Kocha ró¿nego stopnia. Opcjonalnie mo¿e byæ animacja  (+5p. dodatkowo).
+Gra 3d  z grafik¹ wire-frame (10 p.)
+Zaimplementowaæ prost¹ grê, w której nale¿y przeprowadziæ gracza z jednego punktu w przestrzeni do innego omijaj¹c losowo rozmieszczone prostopad³oœciany. Aby unikn¹æ problemów z widocznoœci¹ i zas³anianiem, zastosuj grafikê wire-frame i przyjmij, ¿e wszystkie linie s¹ tego samego koloru. 

@@ -1,0 +1,9 @@
+Hobby
+hob1.php
+Programowanie
+hob2.php
+Muzyka
+hob3.php
+Matematyka
+hob4.php
+Gry komputerowe

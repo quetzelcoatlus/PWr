@@ -1,0 +1,13 @@
+Trzeci projekt. Rozbudowujemy dotychczas budowany portal o funkcjê opinii od u¿ytkowników oraz kilku innych dodatków.
+Opinie te maj¹ byæ zbierane w prostej (mo¿e to byæ baza z³o¿ona z pojedynczej tabeli) bazie danych.
+Dodawanie wpisów ma byæ chronione samodzielnie napisan¹ chaptcha, specyficzn¹ dla naszego kierunku studiów (patrz Zadanie 25)
+Stosuj¹c mathjax dodaj do opisów wyk³adów teoretycznych przenajmniej po jednym z najwa¿niejszych wzorów które pozna³eœ na wyk³adzie
+Kody CSS maj¹ byæ napisane w jêzyku SASS i skompilowane do jednego pliku. Przygotuj dwie wersje tych plików: dewelopersk¹ (porz¹dnie sformatowan¹) oraz produkcyjn¹ (skompresowan¹). Prowadz¹cemu laboratorium przekazaæ bêdziecie mieli równie¿ kody SASS'a.
+Do swojego zdjêcia zastosuj technologiê localStorage. Jeœli u¿ywasz zdjêcia o rozmiarze wiêkszym ni¿ 1Mb, to u¿yj obietnic do jego za³adowania.
+Projekt ma byæ oddany na ostatnim laboratorium. 
+Oceniane bêd¹ nastêpuj¹ce sk³adniki:
+Poprawnoœæ kodów HTML, CSS i PHP. Nie mo¿e byæ ani jednego b³êdu.
+Jakoœæ kodu: w szczególnoœci zasady DRY, KISS, SRP; optymalizacja css; poprawne stosowanie znaczników semantycznych;
+Estetyka: w szczególnoœci spe³nienie wszystkich wymagañ CRAP; poprawny dobór kolorów; w³aœciwy kontrast; rozs¹dny dobór fontów.
+Ergonomia: zasada "Don't Let Me Think"; "Keep the noise down to a dull roar"
+To jak¹ bazê danych zastosujecie - ustalcie z prowadz¹cym; ale jeœli zastosujecie jak¹œ namiastkê tekstow¹, to na ocenê 5.5 nie mo¿ecie liczyæ. Ja preferujê do takich prostych projektów bazê MariaDB.

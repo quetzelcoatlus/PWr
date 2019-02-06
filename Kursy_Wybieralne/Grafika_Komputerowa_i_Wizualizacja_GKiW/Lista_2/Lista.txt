@@ -1,0 +1,20 @@
+Laboratorium: Lista zadañ 2
+termin 2018.05.07
+
+Rozwi¹zaniami zadañ maj¹ byæ programy napisane w jêzyku Javascript dzia³aj¹ce na stronach HTML. Zarówno plik html oraz programy w Javascript maj¹ zostaæ w podanym terminie umieszczone w repozytorium svn. Dla pliku html nale¿y ustawiæ w³asnoœæ svn:mime-type na wartoœæ text/html;charset=UTF-8. Mo¿na to zrobiæ poleceniem:
+
+svn propset svn:mime-type 'text/html;charset=UTF-8' plik.html
+
+(Po przes³aniu pliku do swojego repozytorium, sprawdŸ czy dany plik html poprawnie siê wyœwietla i uruchamia w przegl¹darce internetowej.) 
+
+Testowanie WebGL (10 p.)
+Napisz prosty program, który demonstruje rysowanie w WebGL obiektów geometrycznych: POINTS, LINE_STRIP, LINE_LOOP, LINES, TRIANGLE_STRIP, TRIANGLE_FAN, TRIANGLES. 
+Zastosowaæ zmienne uniform do ustalania pewnych parametrów rysowania (np. kolorów, przekszta³ceñ geometrycznych itp.) Nale¿y tak¿e:
+wypisaæ w konsoli lub na stronie listê aktywnych atrybutów, zgodnie z przyk³adem na stronie https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getActiveAttrib ,
+analogicznie wykorzystaæ getActiveUniform aby wypisaæ listê zmiennych uniform. 
+zademonstrowaæ dzia³anie bindAttribLocation aby przypisaæ zmienne attribute variable do ustalonych przez u¿ytkownika indeksów generic vertex index.
+Gra komputerowa 2D (20 p.)
+Zaimplementowaæ w WebGL prost¹ dwu-wymiarow¹ grê zrêcznoœciow¹ typu:  Pong,  Arkanoid, Space Invaders, lub inn¹ podobn¹, ale w taki sposób aby t³o zawiera³o jakiœ rysunek utworzony z elementów geometrycznych (np. boisko). Wykorzystaj bufor g³êbokoœci tak aby elementy pierwszoplanowe by³y rysowane z mniejsz¹ wspó³rzêdn¹ Z ni¿ elementy t³a. Zaimplementuj animacjê w zalecany sposób jak w przyk³adowym programie: 
+http://156.17.7.16/public/dydaktyka/kik/grafika/animation/animation.html
+Zwróæ uwagê, ¿e callback animacji jest wywo³ywany w okreœlonych punktach czasowych zale¿nych od czêstotliwoœci wyœwietlania obrazy na ekranie, natomiast zdarzenia istotne dla stanu gry, takie jak np. zderzenie obiektów, mog¹ wyst¹piæ miêdzy tymi punktami czasowymi. Zadbaj o poprawn¹ implementacjê takich sytuacji. 
+Skoncentruj siê na graficznej prezentacji gry. Obliczanie punktacji i gromadzenie statystyk dotycz¹cych wyników nie jest istotne. 

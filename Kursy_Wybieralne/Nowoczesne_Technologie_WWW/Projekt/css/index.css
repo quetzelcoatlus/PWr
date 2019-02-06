@@ -1,0 +1,152 @@
+h1 {
+	font-size:60px;
+	font-family: "Times New Roman", Times, serif;
+	margin: 0;
+    font-weight: bold;
+}
+
+h2 {
+	 text-align:center;
+	font-size:30px;
+    margin:5px;
+	font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+ul {
+	list-style-type:square;
+	font-size: 22px;
+    padding:20px;
+}
+
+li {
+    margin-left:20px;
+    text-align:left;
+}
+a:link {
+	color: black;
+	text-decoration: none;
+}
+
+a:visited {
+    color: black;
+	text-decoration: none;
+}
+
+a:hover {
+	color:#555555;
+	text-decoration: none;
+}
+
+a:active {
+    color:#555555;
+	text-decoration: none;
+}
+
+body {
+	background-color: #E6E6E6;
+    padding:10px;
+}
+
+.back {
+	background-color: #559E54;
+	width: 66.66%;
+	margin: auto;
+	border-radius: 25px;
+	padding: 10px;
+	border: 1px solid black;
+    text-align: center;
+}
+
+.head {
+	background-color: #B7944E;
+	width: 100%;
+	height: auto;
+	border-radius: 20px 20px 20px 20px;
+	text-align: center;
+	border: 1px solid black;
+}
+
+.about {
+	background-color: #B7944E;
+	width: 100%;
+	margin-top: 10px;
+	border: 1px solid black;
+	border-radius: 20px;
+	color: #FDB80C;
+    overflow:hidden;
+}
+
+.serafis{
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 40px;
+	float: right;
+	border: 1px solid black;
+}
+
+.text {
+	color: #000000;
+	font-size: 20px;
+	margin: 1em;
+	margin-right: 2em;
+	text-align: justify;
+}
+
+.left {
+	margin-top: 10px;
+    margin-bottom:10px;
+	width: 49.1%;	
+    display:inline-block;
+	height: auto;
+	background-color: #B7944E;
+	border: 1px solid black;
+	border-radius: 20px 20px 20px 20px;
+}
+
+.right {
+	margin-top: 10px;
+    margin-bottom:10px;
+    margin-left: 5px;
+	width: 49.1%;
+    display:inline-block;
+	height: auto;
+	background-color: #B7944E;
+	border: 1px solid black;
+	border-radius: 20px 20px 20px 20px;
+}
+
+.title{
+	width: 100%;
+	background-color: #340933;
+	border-radius: 20px 20px 0px 0px;
+	font-size: 40px;
+	text-align: center;
+	border-bottom: 1px solid black;
+	color: #eeeeee;
+}
+
+
+
+@media only screen and (max-width:800px) {
+	.left, .right {
+		width:100%;
+	}
+	
+	.head {
+		width:100%;
+	}
+	.about {
+		width: 100%;
+	}
+
+	.text {
+		font-size: 20px;
+	}
+	
+	.back {
+		width: 100%;
+		margin: 0px;
+		clear: both;
+	}
+}
