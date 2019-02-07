@@ -1,5 +1,5 @@
 Kurs 'Programowanie w Logice', czyli de facto kurs języka Prolog.
-Jako że to była moja pierwsza styczność z tym językiem/paradygmatem, toteż w początkowych trzech/czterech listach nie oczekiwałbym szukania zbyt wielu mądrości, ale za to w późniejszyczh jest parę programów, z których jestem zadowolony.
+Jako że to była moja pierwsza styczność z tym językiem/paradygmatem, toteż w początkowych trzech/czterech listach nie oczekiwałbym szukania zbyt wielu mądrości, ale za to w późniejszych jest parę programów, które (mam nadzieję) mogą być uznane za "dobre".
 
 Skrót zawartości list (więcej informacji w poszczególnych katalogach):
 
