@@ -1,11 +1,3 @@
-/*
-
-Autor: Jan Brzeżański
-Indeks: 236814
-
-*/
-
-
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>

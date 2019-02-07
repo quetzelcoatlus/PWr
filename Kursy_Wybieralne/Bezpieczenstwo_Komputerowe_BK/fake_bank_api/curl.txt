@@ -1,0 +1,29 @@
+rejestracja:
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+--data '{"login":"rest", "email":"rest@rest", "pass":"rest", "question":"pytanie?", "answer":"pytanie"}' https://nbank.com.pl/api/register
+
+
+logowanie:
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+--data '{"login":"krolik", "pass":"krolik"}' https://nbank.com.pl/api/login --cookie "ciasteczka.txt" --cookie-jar "ciasteczka.txt"
+
+
+zmiana hasła:
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+--data '{"login":"rest"}' https://nbank.com.pl/api/forget
+
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+--data '{"login":"rest", "answer":"pytanie", "pass":"rest1"}' https://nbank.com.pl/api/change
+
+
+historia:
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+https://nbank.com.pl/api/history --cookie "ciasteczka.txt" --cookie-jar "ciasteczka.txt"
+
+przelew:
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+--data '{"number":"123", "amount":"123", "title":"rest api test"}' https://nbank.com.pl/api/transfer --cookie "ciasteczka.txt" --cookie-jar "ciasteczka.txt"
+
+wylogowanie:
+curl -X POST -H "Content-Type: application/json" --cacert ./CAcert.crt --key ./privkeyC.pem --cert certC.crt \
+https://nbank.com.pl/api/logout

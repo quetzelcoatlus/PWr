@@ -1,0 +1,3 @@
+Serwis bankowy umożliwiający rejestrację, logowanie, zmianę hasła, wykonywanie przelewów, przeglądania wykonanych przelewów.
+
+Żeby to zadziałało zapewne trzeba pokonfigurować serwer PHP i takie tam...

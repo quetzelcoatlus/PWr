@@ -1,0 +1,6 @@
+SET_COOKIES:TRUE
+ACCEPT_ALL_COOKIES:TRUE
+PERSISTENT_COOKIES:TRUE
+COOKIE_FILE:/home/quetzelcoatlus/pwr/bezpieka2018/cookie.file
+COOKIE_SAVE_FILE:/home/quetzelcoatlus/pwr/bezpieka2018/cookie.file
+FORCE_SSL_COOKIES_SECURE:FALSE

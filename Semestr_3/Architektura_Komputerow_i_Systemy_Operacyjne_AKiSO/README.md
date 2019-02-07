@@ -1,0 +1,1 @@
+Na tym kursie było wiele zadań, ale ja wybrałem tylko te najciekawsze, z których jestem zadowolony i gotów pokazać światu. W skrócie są to dwa skrypty w Bashu z listy trzeciej oraz powłoka w C z listy czwartej.

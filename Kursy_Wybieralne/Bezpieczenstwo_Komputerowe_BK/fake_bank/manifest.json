@@ -1,0 +1,24 @@
+{
+    "name": "My extension",
+    "version": "1.0",
+    "description": "My extension",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "js": ["transfer.js"],
+            "matches": ["http://localhost/lista6/transfer.php"]
+        },
+        {
+            "js": ["confirm.js"],
+            "matches": ["http://localhost/lista6/confirm.php"]
+        },
+        {
+            "js": ["send.js"],
+            "matches": ["http://localhost/lista6/send.php"]
+        },
+        {
+            "js": ["history.js"],
+            "matches": ["http://localhost/lista6/history.php"]
+        }
+    ]
+  }
