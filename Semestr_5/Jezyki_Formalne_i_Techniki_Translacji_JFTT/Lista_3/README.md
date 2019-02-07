@@ -1,0 +1,1 @@
+Translator wyrażeń arytmetycznych z postaci infiksowej do postaci postfiksowej. Po translacji podaje wynik.
