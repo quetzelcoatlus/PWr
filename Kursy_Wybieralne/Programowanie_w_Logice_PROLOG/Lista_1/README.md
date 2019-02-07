@@ -1,0 +1,1 @@
+Podstawy języka Prolog: fakty, predykaty, koniunkcja, aleternatywa, negacja, operacje matematyczne.

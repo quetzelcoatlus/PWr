@@ -2,9 +2,9 @@ kobieta(basia).
 kobieta(ona).
 kobieta(amanda).
 
-mê¿czyzna(tomek).
-mê¿czyzna(krzys).
-mê¿czyzna(stefan).
+mezczyzna(tomek).
+mezczyzna(krzys).
+mezczyzna(stefan).
 
 matka(basia, tomek).
 matka(ona, tomek).
@@ -15,10 +15,10 @@ ojciec(krzys, basia).
 
 rodzic(X,Y) :- matka(X,Y); ojciec(X,Y).
 
-jest_matk¹(X) :- matka(X,_).
+jest_matka(X) :- matka(X,_).
 jest_ojcem(X) :- ojciec(X,_).
-jest_synem(X) :- rodzic(_,X), mê¿czyzna(X).
-jest_córk¹(X) :- rodzic(_,X), kobieta(X).
+jest_synem(X) :- rodzic(_,X), mezczyzna(X).
+jest_corka(X) :- rodzic(_,X), kobieta(X).
 siostra(X,Y) :- rodzic(Z,X), rodzic(Z,Y), kobieta(X), X \= Y.
-dziadek(X,Y) :- rodzic(X,Z), rodzic(Z,Y), mê¿czyzna(X).
-rodzeñstwo(X,Y) :- rodzic(Z,X), rodzic(Z,Y), X \= Y.
+dziadek(X,Y) :- rodzic(X,Z), rodzic(Z,Y), mezczyzna(X).
+rodzenstwo(X,Y) :- rodzic(Z,X), rodzic(Z,Y), X \= Y.

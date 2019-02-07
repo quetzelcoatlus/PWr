@@ -4,5 +4,5 @@ while N > 1 do
 SILNIA := SILNIA * N;
 N := N - 1;
 od;
-SILNIA := SILNIA + 1;
+
 write SILNIA;
