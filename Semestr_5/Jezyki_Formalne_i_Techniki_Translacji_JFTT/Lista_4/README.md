@@ -1,5 +1,5 @@
 # "Czemu to nie działa?!"
-#### Czyli: o moim kompilatorze słów kilka
+  #### Czyli: o moim kompilatorze słów kilka
 
 ## Przedmowa
 
