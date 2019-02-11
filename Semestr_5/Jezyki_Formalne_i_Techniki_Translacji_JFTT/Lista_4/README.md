@@ -15,4 +15,4 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 
 
 
-## Analiza Leksykalna
+## 1. Analiza Leksykalna
