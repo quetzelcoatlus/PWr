@@ -1,4 +1,4 @@
-# "Czemu to nie działa?!", czyli: o moim kompilatorze słów kilka
+# "Czemu to nie działa?!", czyli o moim kompilatorze słów kilka
 
 ## Przedmowa
 
@@ -15,3 +15,6 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 
 
 ## 1. Analiza Leksykalna
+Analiza leksykalna to takie tegesy.
+
+#### 1.1 Tablica symboli
