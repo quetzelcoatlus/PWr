@@ -1,5 +1,4 @@
-# "Czemu to nie działa?!"
-  #### Czyli: o moim kompilatorze słów kilka
+# "Czemu to nie działa?!", czyli: o moim kompilatorze słów kilka
 
 ## Przedmowa
 
@@ -12,7 +11,7 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 1. [Analiza Leksykalna](#1-analiza-leksykalna)
 2. [Analiza Składniowa](#analiza-skladniowa)
 3. [Kod pośredni](#kod-posredni)
-
+4. [Asembler](#asembler)
 
 
 ## 1. Analiza Leksykalna
