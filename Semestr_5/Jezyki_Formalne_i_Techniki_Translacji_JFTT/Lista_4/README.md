@@ -8,8 +8,9 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 
 ## Spis treści
 
-1. [Analiza Leksykalna](#1-analiza-leksykalna)
-1.1 [Tablica symboli](#1-1-tablica-symboli)
+1. [Analiza Leksykalna](#1-analiza-leksykalna)  
+  1.1 [Tablica symboli](#11-tablica-symboli)
+  1.2 [Lekser (Flex)](#12-lekser)
 2. [Analiza Składniowa](#analiza-skladniowa)
 3. [Kod pośredni](#kod-posredni)
 4. [Asembler](#asembler)
@@ -19,3 +20,4 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 Analiza leksykalna to takie tegesy.
 
 ### 1.1 Tablica symboli
+### 1.2 Lekser (Flex)
