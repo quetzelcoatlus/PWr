@@ -9,9 +9,9 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 
 ## Spis treści
 
-1. [Analiza Leksykalna](#analiza-leksykalna)
-1. [Analiza Składniowa](#analiza-skladniowa)
-
+1. [Analiza Leksykalna](#1-analiza-leksykalna)
+2. [Analiza Składniowa](#analiza-skladniowa)
+3. [Kod pośredni](#kod-posredni)
 
 
 
