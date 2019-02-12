@@ -1,4 +1,4 @@
-# "Czemu to nie działa?!", czyli o moim kompilatorze słów kilka
+# O kompilatorze słów kilka
 
 ## Przedmowa
 Witaj, drogi czytelniku. Jeśli tu dotarłeś, to albo interesuje Cię temat kompilatora z przedmiotu "Języki Formalne i Techniki Translacji" na Wydziale Podstawowych Problemów Techniki na Politechnice Wrocławskiej, albo przypadkiem dokopałeś się do tego folderu, chodząc po tym repozytorium. Tak czy siak, zapraszam Cię do lektury niniejszego *poradnika*, w którym postaram się opisać proces tworzenia kompilatora poprzez wszystkie fazy, zarówno od strony teoretycznej, jak i w oparciu o kod mojego kompilatora.
@@ -30,7 +30,7 @@ Tablica symboli to struktura (niekoniecznie *tablica*), która przechowuje infor
 * stała
 
 Informacje, które może zawierać tablica symboli, to na przykład:
-* nazwa (zmienne, tablice, iteratory) - ciąg znaków z klasy [_a-z] identyfikujący obiekt 
+* nazwa (zmienne, tablice, iteratory) - ciąg znaków identyfikujący obiekt 
 * adres w pamięci (zmienne, tablice, iteratory) - miejsce, w którym znajduje się obiekt w pamięci maszyny docelowej
 * rozmiar (tablice) - liczba komórek pamięci zmiennej tablicowej
 * offset (tablice) - dla tablic, które nie zaczynają się od zera, warto wyliczyć przesunięcie względem zera
@@ -50,40 +50,41 @@ Program wejściowy jest dany w następującej postaci:
 program      -> DECLARE declarations IN commands END
 
 declarations -> declarations pidentifier;
-             | declarations pidentifier(num:num);
-             | 
+              | declarations pidentifier(num:num);
+              | 
 
 commands     -> commands command
-             | command
+              | command
 
 command      -> identifier := expression;
-             | IF condition THEN commands ELSE commands ENDIF
-             | IF condition THEN commands ENDIF
-             | WHILE condition DO commands ENDWHILE
-             | DO commands WHILE condition ENDDO
-             | FOR pidentifier FROM value TO value DO commands ENDFOR
-             | FOR pidentifier FROM value DOWNTO value DO commands ENDFOR
-             | READ identifier;
-             | WRITE value;
+              | IF condition THEN commands ELSE commands ENDIF
+              | IF condition THEN commands ENDIF
+              | WHILE condition DO commands ENDWHILE
+              | DO commands WHILE condition ENDDO
+              | FOR pidentifier FROM value TO value DO commands ENDFOR
+              | FOR pidentifier FROM value DOWNTO value DO commands ENDFOR
+              | READ identifier;
+              | WRITE value;
 
 expression   -> value
-             | value + value
-             | value - value
-             | value * value
-             | value / value
-             | value % value
+              | value + value
+              | value - value
+              | value * value
+              | value / value
+              | value % value
 
 condition    -> value = value
-             | value != value
-             | value < value
-             | value > value
-             | value <= value
-             | value >= value
+              | value != value
+              | value < value
+              | value > value
+              | value <= value
+              | value >= value
 
 value        -> num
-             | identifier
+              | identifier
 
 identifier   -> pidentifier
-             | pidentifier(pidentifier)
-             | pidentifier(num)
+              | pidentifier(pidentifier)
+              | pidentifier(num)
 ```
+gdzie `pidentifier` wyraża się w postaci wyrażenia regularnego `[_a-z]+`, a `num` to liczba naturalna dająca zapisać się w zmiennej typu `long long` (64 bity).
