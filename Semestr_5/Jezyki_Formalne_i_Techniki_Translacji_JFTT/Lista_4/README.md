@@ -41,8 +41,6 @@ Dodawanie do tablicy symboli omówimy w następnym podrozdziale, a czytanie dopi
 
 ### 1.2. Lekser (Flex)
 Zajmiemy się teraz budowaniem leksera przy użyciu Flex-a. Pozwolę sobie pominąć podstawy używania tego narzędzia (pragnącących je poznać zapraszam do lektury list [drugiej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_2) i [trzeciej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_3), które się na nich skupiają) i zająć się następującymi aspektami:
-* Co musimy wczytać?
-* Co musimy zwrócić?
 
 #### Co musimy wczytać?
 Program wejściowy jest dany w następującej postaci:
