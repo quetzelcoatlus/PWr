@@ -46,7 +46,7 @@ Zajmiemy się teraz budowaniem leksera przy użyciu Flex-a. Pozwolę sobie pomin
 
 #### Co musimy wczytać?
 Program wejściowy jest dany w następującej postaci:
-```
+```scala
 program      -> DECLARE declarations IN commands END
 
 declarations -> declarations pidentifier;
@@ -88,3 +88,14 @@ identifier   -> pidentifier
               | pidentifier(num)
 ```
 gdzie `pidentifier` wyraża się w postaci wyrażenia regularnego `[_a-z]+`, a `num` to liczba naturalna dająca zapisać się w zmiennej typu `long long` (64 bity).
+
+Zatem do wczytania mamy:
+* słowa kluczowe = `DECLARE`, `IN`, `END`, `IF`, `THEN`, `ELSE`, `ENDIF`, `WHILE`, `DO`, `ENDWHILE`, `ENDDO`, `FOR`, `FROM`, `TO`, `DOWNTO`, `ENDFOR`, `READ`, `WRITE`
+* ciągi symbolów = `;`, `(`, `)`, `:`, `:=`, `+`, `-`, `*`, `/`, `%`, `=`, `!=`, `<`, `>`, `<=`, `>=`
+* nazwy zmiennych = `[_a-z]+` (wyrażenie regularne)
+* liczby = `[0-9]+` (wyrażenie regularne)
+
+#### Co musimy zwrócić?
+Przekazywanie informacji z leksera do parsera może być zrealizowana na wiele różnych sposobów, ale ja przyjąłem, że wartość zwracana przez lekser jest zawsze typu `int`. W przypadku dwóch pierwszych grup (słowa kluczowe i ciągi symbolów) zwrócona zostanie wartość typu wyliczeniowego `enum`, który zostanie wygenerowany przez Bisona po zadklarowaniu w nim tokenów (więcej o tym w następnym rozdziale). Dla nazw zmiennych i liczb wartością zwracaną jest indeks w tablicy symboli, który im odpowiada (ta konwencja, tj. posługiwanie się indeksem w tablicy symboli, będzie obowiązywać praktycznie przez wszystkie fazy kompilatora).
+
+#### Dodawanie do tablicy symboli
