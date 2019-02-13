@@ -234,6 +234,18 @@ program
 
 Po przetworzeniu całego programu w czwartym argumencie (`commands`) uzyskamy de facto drzewo wszystkich komend programu. Zatem jedynie, co musimy zrobić, to podpiąć je jako dziecko komendy o typie `COM_PROGRAM` (dla wygody jest to zmienna globalna).
 
+```c
+void create_program(struct Command* commands){
+    program = malloc(sizeof(struct Command));
+    program->type = COM_PROGRAM;
+    program->index = -1;
+    program->size = 1;
+    program->maxSize = 1;
+    program->commands = malloc(sizeof(struct Command*));
+    program->commands[0] = commands;
+}
+```
+
 ---
 
 ```
@@ -245,6 +257,77 @@ declarations
 ```
 W sekcji deklaracji w końcu jesteśmy w stanie stwierdzić, jakiego typu jest deklarowany obiekt (zmienna/tablica). Dlatego też dla zmiennej wywoływana jest funkcja `set_variable`, która przyjmuje jako argument indeks w tablicy symboli odpowiadający zmiennej i ustawia typ tego symbolu na `VARIABLE`. Funkcja `set_array` jest następującej sygnatury:
 ```c
-int set_array(int pos, int start, int end)
+int set_array(int pos, int start, int end);
 ```
-Ustawia ona typ symbolu na `pos` pozycji w tablicy symboli na `ARRAY`, ustawia pole `offset` na `start` oraz wylicza rozmiar tablicy (`end` - `start` + 1).
+Ustawia ona typ symbolu na `pos` pozycji w tablicy symboli na `ARRAY`, ustawia wartość pola `offset` na wartość `start` oraz wylicza rozmiar tablicy (`end` - `start` + 1).
+
+---
+
+```
+commands
+: %empty                { $$ = create_empty_command(COM_COMMANDS); }
+| commands command      { $$ = add_command($1, $2); }
+| commands error        { yyerror("Blad skladniowy"); }  
+;
+```
+`commands` oznacza blok komend i zawiera lewostronną rekursję, która kończy się, gdy skończą się komendy (`%empty`). Zatem w akcji pustej komendy tworzymy pustą komendę:
+```c
+struct Command* create_empty_command(enum CommandType type){    
+    struct Command* c = malloc(sizeof(struct Command));
+    c->type = type;
+    c->index = -1;
+    c->size = 0;
+    c->maxSize = 8;
+    c->commands = malloc(sizeof(struct Command*) * 8);
+
+    return c;
+}
+```
+Domyślnie może ona pomieścić ośmioro dzieci, ale przy każdym dodaniu dziecka będzie sprawdzana konieczność poszerzenia. Dodawanie komend przebiega następująco:
+```c
+struct Command* add_command(struct Command* parent, struct Command* child){
+    if(parent->size == parent->maxSize)
+        resize_command(parent)
+    
+    parent->commands[parent->size] = child; 
+    parent->size++;
+    
+    return parent;
+```
+Do obecnie przetwarzanych komend dodajemy nowoprzetworzoną komendę.  
+
+Analizę błędów, z wyjaśnionych wcześniej przyczyn, (na razie) pomijamy.
+
+---
+
+```
+command
+: identifier IS expression SEM                          {$$ = create_parent_command(COM_IS,      2, $1, $3);}
+| IF condition THEN commands ELSE commands ENDIF        {$$ = create_parent_command(COM_IFELSE,  3, $2, $4, $6);}   
+| IF condition THEN commands ENDIF                      {$$ = create_parent_command(COM_IF,      2, $2, $4);}    
+| WHILE condition DO commands ENDWHILE                  {$$ = create_parent_command(COM_WHILE,   2, $2, $4);}
+| DO commands WHILE condition ENDDO                     {$$ = create_parent_command(COM_DO,      2, $2, $4);}
+| FOR PID FROM value TO value DO commands ENDFOR        {$$ = create_parent_command(COM_FOR,     5, create_value_command(COM_PID, $2), create_value_command(COM_PID, $2+1),$4, $6, $8);}
+| FOR PID FROM value DOWNTO value DO commands ENDFOR    {$$ = create_parent_command(COM_FORDOWN, 5, create_value_command(COM_PID, $2), create_value_command(COM_PID, $2+1),$4, $6, $8);}
+| READ identifier SEM                                   {$$ = create_parent_command(COM_READ,    1, $2);}    
+| WRITE value SEM                                       {$$ = create_parent_command(COM_WRITE,   1, $2);} 
+;
+
+expression
+: value                 {$$ = $1;}
+| value ADD value       {$$ = create_parent_command(COM_ADD, 2, $1, $3);}
+| value SUB value       {$$ = create_parent_command(COM_SUB, 2, $1, $3);}
+| value MUL value       {$$ = create_parent_command(COM_MUL, 2, $1, $3);}
+| value DIV value       {$$ = create_parent_command(COM_DIV, 2, $1, $3);}
+| value MOD value       {$$ = create_parent_command(COM_MOD, 2, $1, $3);}
+;
+
+condition
+: value EQ value        {$$ = create_parent_command(COM_EQ,  2, $1, $3);}
+| value NEQ value       {$$ = create_parent_command(COM_NEQ, 2, $1, $3);}
+| value LT value        {$$ = create_parent_command(COM_LT,  2, $1, $3);}
+| value GT value        {$$ = create_parent_command(COM_GT,  2, $1, $3);}
+| value LEQ value       {$$ = create_parent_command(COM_LEQ, 2, $1, $3);}
+| value GEQ value       {$$ = create_parent_command(COM_GEQ, 2, $1, $3);}
+;
+```
