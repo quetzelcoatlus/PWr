@@ -415,6 +415,45 @@ Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale
 
 ## 3. Kod pośredni
 Głównym celem zamiany drzewa wyprowadzenia na kod pośredni jest chęć pozbycia się konstrukcji, które najbardziej odstają od wynikowego kodu asemblera: pętli i (w mniejszym stopniu) instrukcji warunkowych.  
-Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje (pełna definicja maszyny rejestrowej będzie w nastepnym rozdziale): `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). Dzięki takiemu zabiegowi będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, którą będzie nasz kod pośredni jest **kod trójadresowy**.
+Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje (pełna definicja maszyny rejestrowej będzie w nastepnym rozdziale): `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). Dzięki takiemu zabiegowi będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
 
 ### 3.1. Kod trójadresowy
+Kod trójadresowy jest następującej postaci:
+```c
+enum CodeType{
+    CODE_UNKNOWN, 
+    
+    CODE_LABEL,   
+    
+    CODE_READ,    
+    CODE_WRITE,   
+    
+    CODE_HALF,    
+    CODE_INC,     
+    CODE_DEC,     
+      
+    CODE_COPY,    
+    
+    CODE_ADD,     
+    CODE_SUB,     
+    
+    CODE_MUL,     
+    CODE_DIV,     
+    CODE_MOD,     
+        
+    CODE_JUMP,    
+    CODE_JNEQ,    
+    CODE_JEQ,     
+    CODE_JGEQ,    
+    CODE_JLEQ,    
+    CODE_JGT,        
+    CODE_JLT,     
+    CODE_JZERO    
+};
+
+struct CodeCommand{
+    enum CodeType type;
+    int size;
+    int args[6];
+};
+```
