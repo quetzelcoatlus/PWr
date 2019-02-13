@@ -177,7 +177,7 @@ Gdzie `type` oznacza typ komendy, `index` to indeks w tablicy symboli (przysług
 Funkcje, które będą to drzewo tworzyć, zostaną opisane w następnym podrozdziale.
 
 ### 2.2. Parser (Bison)
-Zajmiemy się teraz budową parsera (na szczęście zrobi to za nas Bison; my tylko podamy mu reguły, którymi ma się kierować). Jako że użytych jest w nim wiele funkcji budujących drzewo wyprowadzenia, które mogą wymagać wyjaśnienia, przejdziemy się przez cały plik definiujący parser, krok po kroku opisując dziejące się akcje.
+Zajmiemy się teraz budową parsera (na szczęście zrobi to za nas Bison; my tylko podamy mu reguły, którymi ma się kierować). Jako że użytych jest w nim wiele funkcji budujących drzewo wyprowadzenia, które mogą wymagać wyjaśnienia, przejdziemy się przez cały plik definiujący parser, krok po kroku opisując dziejące się akcje. Nie będę dokładnie opisywał działania Bisona, zainteresowanych zapraszam do lektury listy [trzeciej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_3).
 
 #### Definicje
 Na początku definiujemy typy, które będą używane w regułach:
@@ -238,12 +238,16 @@ Po przetworzeniu całego programu w czwartym argumencie (`commands`) uzyskamy de
 void create_program(struct Command* commands){
     program = malloc(sizeof(struct Command));
     program->type = COM_PROGRAM;
-    program->index = -1;
+    program->index = NONE;
     program->size = 1;
     program->maxSize = 1;
     program->commands = malloc(sizeof(struct Command*));
     program->commands[0] = commands;
 }
+```
+Zostało użyte makro `NONE` i będzie się ono jeszcze przewijać przez kolejne fazy. Oznacza wartość pustą. Jest to dokładnie:
+```c
+#define NONE -1
 ```
 
 ---
@@ -275,7 +279,7 @@ commands
 struct Command* create_empty_command(enum CommandType type){    
     struct Command* c = malloc(sizeof(struct Command));
     c->type = type;
-    c->index = -1;
+    c->index = NONE;
     c->size = 0;
     c->maxSize = 8;
     c->commands = malloc(sizeof(struct Command*) * 8);
@@ -330,7 +334,7 @@ condition
 | value GEQ value       { $$ = create_parent_command(COM_GEQ, 2, $1, $3); }
 ;
 ```
-W powyższych regułach kierujemy się jedną zasadą: otrzymujemy ileś komend dzieci i tworzymy dla nich rodzica o określonym typie (wyjaśnienie akcji dla FOR-ów znajdzie się trochę niżej). Służy do tego następująca funkcja:
+W powyższych regułach kierujemy się jedną zasadą: otrzymujemy ileś komend dzieci i tworzymy dla nich rodzica o określonym typie. Każdy wiersz w gramatyce, np. instrukcje warunkowe `IF`, `IF/ELSE` albo pętle `WHILE`, `DO`, `FOR`, będzie odpowiadać komendzie w drzewie wyprowadzenia i jako dzieci posiadać swoje podkomendy. Przykładowo komenda `WHILE` ma dwoje dzieci: `condition` (warunek, który trzyma nas w pętli) oraz `commands` (wszystkie komendy znajdujące się w WHILE-u). Wyjaśnienie nieco skomplikowanych akcji dla FOR-ów znajdzie się trochę niżej. Do tworzenia komendy rodzica służy następująca funkcja:
 ```c
 struct Command* create_parent_command(enum CommandType type, int numberOfChilds, ...){  
     va_list ap;
@@ -338,7 +342,7 @@ struct Command* create_parent_command(enum CommandType type, int numberOfChilds,
     
     struct Command* c = malloc(sizeof(struct Command));
     c->type = type;
-    c->index = -1;
+    c->index = NONE;
     c->size = numberOfChilds;
     c->maxSize = numberOfChilds;
     c->commands = malloc(sizeof(struct Command*) * numberOfChilds);
