@@ -228,19 +228,23 @@ Reguły zostały praktycznie jeden do jednego przepisane z gramatyki języka wej
 
 ```
 program
-: DECLARE declarations IN commands END {create_program($4);}
+: DECLARE declarations IN commands END { create_program($4); }
 ;
 ```
 
-Coś tam...
+Po przetworzeniu całego programu w czwartym argumencie (`commands`) uzyskamy de facto drzewo wszystkich komend programu. Zatem jedynie, co musimy zrobić, to podpiąć je jako dziecko komendy o typie `COM_PROGRAM` (dla wygody jest to zmienna globalna).
 
 ---
 
 ```
 declarations
 : %empty
-| declarations PID SEM                          {set_variable($2);} 
-| declarations PID LBR NUM COL NUM RBR SEM      {if(set_array($2, $4, $6) < 0) yyerror("Zly zakres tablicy");} 
+| declarations PID SEM                          { set_variable($2); } 
+| declarations PID LBR NUM COL NUM RBR SEM      { set_array($2, $4, $6); } 
 ;
 ```
-Coś kolejnego
+W sekcji deklaracji w końcu jesteśmy w stanie stwierdzić, jakiego typu jest deklarowany obiekt (zmienna/tablica). Dlatego też dla zmiennej wywoływana jest funkcja `set_variable`, która przyjmuje jako argument indeks w tablicy symboli odpowiadający zmiennej i ustawia typ tego symbolu na `VARIABLE`. Funkcja `set_array` jest następującej sygnatury:
+```c
+int set_array(int pos, int start, int end)
+```
+Ustawia ona typ symbolu na `pos` pozycji w tablicy symboli na `ARRAY`, ustawia pole `offset` na `start` oraz wylicza rozmiar tablicy (`end` - `start` + 1).
