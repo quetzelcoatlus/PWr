@@ -396,3 +396,11 @@ Wróćmy zatem jeszcze na moment do pętli FOR:
 | FOR PID FROM value TO value DO commands ENDFOR        { $$ = create_parent_command(COM_FOR,     5, create_value_command(COM_PID, $2), create_value_command(COM_PID, $2+1),$4, $6, $8); }
 | FOR PID FROM value DOWNTO value DO commands ENDFOR    { $$ = create_parent_command(COM_FORDOWN, 5, create_value_command(COM_PID, $2), create_value_command(COM_PID, $2+1),$4, $6, $8); }
 ```
+Akcje te tworzą komendę, która ma pięcioro dzieci:
+* iterator
+* sztucznie dodany licznik pozostałych iteracji (którego indeks w tablicy symboli jest zawsze o jeden większy niż iteratora, stąd `$2+1`)
+* wartość początkowa
+* wartość końcowa
+* komendy
+
+Sztuczne dodanie licznika pozostałych iteracji trochę kompilikuje sprawę, bo wprowadzamy do drzewa element, którego nie było w wejściowej gramatyce, ale wyjaśnienie potrzeby jego użycia przestanie być tajemnicą już następnym rozdziale!
