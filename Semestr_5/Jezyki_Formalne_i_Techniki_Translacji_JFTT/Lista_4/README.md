@@ -416,10 +416,11 @@ Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale
 
 ## 3. Kod pośredni
 Głównym celem zamiany drzewa wyprowadzenia na kod pośredni jest chęć pozbycia się konstrukcji, które najbardziej odstają od wynikowego kodu asemblera: pętli i (w mniejszym stopniu) instrukcji warunkowych.  
-Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje: `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). Dzięki takiemu zabiegowi będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
+Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje: `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). A skoro mamy skoki, to potrzebujemy też miejsca do którego będziemy skakać. Żeby nie musieć operować na rzeczywistych instrukcjach, które mogą się zmieniać, wprowadzamy **etykiety**. Będą to *bezpostaciowe* instrukcje z unikatowym identyfikatorem, więc będziemy potrzebowali jedynie zapamiętać jedną liczbę przy skoku. W praktyce skok na etykietę będzie oznaczać skok na instrukcję znajdującą się bezpośrednio po niej.  
+Dzięki takim zabiegom będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
 
 ### 3.1. Kod trójadresowy
-Kod trójadresowy jest następującej postaci:
+Struktura kodu trójadresowego jest następującej postaci:
 ```c
 enum CodeType{
     CODE_UNKNOWN, 
@@ -460,29 +461,29 @@ struct CodeCommand{
 ```
 Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
 1. Instrukcje z języka wejściowego:  
-  * `CODE_READ` (1 argument - zmienna do wczytania)
+  * `CODE_READ`  (1 argument - zmienna do wczytania)
   * `CODE_WRITE` (1 argument - zmienna do wypisania)
-  * `CODE_ADD` (3 argumenty - zmienna docelowa, składnik, składnik)
-  * `CODE_SUB` (3 argumenty - zmienna docelowa, odjemna, odjemnik)
-  * `CODE_MUL` (3 argumenty - zmienna docelowa, czynnik, czynnik)
-  * `CODE_DIV` (3 argumenty - zmienna docelowa, dzielna, dzielnik)
-  * `CODE_MOD` (3 argumenty - zmienna docelowa, dzielna, dzielnik)
+  * `CODE_ADD`   (3 argumenty - zmienna docelowa, składnik, składnik)
+  * `CODE_SUB`   (3 argumenty - zmienna docelowa, odjemna, odjemnik)
+  * `CODE_MUL`   (3 argumenty - zmienna docelowa, czynnik, czynnik)
+  * `CODE_DIV`   (3 argumenty - zmienna docelowa, dzielna, dzielnik)
+  * `CODE_MOD`   (3 argumenty - zmienna docelowa, dzielna, dzielnik)
   
 2. Instrukcje maszyny rejestrowej:
-  * `CODE_HALF`(1 argument - zmienna)
-  * `CODE_INC` (1 argument - zmienna)
-  * `CODE_DEC` (1 argument - zmienna)
-  * `CODE_JUMP` (1 argument - numer etykiety)
+  * `CODE_HALF`  (1 argument - zmienna)
+  * `CODE_INC`   (1 argument - zmienna)
+  * `CODE_DEC`   (1 argument - zmienna)
+  * `CODE_JUMP`  (1 argument - numer etykiety)
   * `CODE_JZERO` (2 argumenty - numer etykiety, zmienna)
   
 3. Instrukcje dodane:
-  * `CODE_JNEQ` (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JEQ`  (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JGEQ` (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JLEQ` (3 argumenty - numer etykiety, zmienna, zmienna)  
-  * `CODE_JGT`  (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JLT`  (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_LABEL` (etykieta = cel skoku; 1 argument - numer etykiety)
+  * `CODE_JNEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JEQ`     (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JGEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JLEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)  
+  * `CODE_JGT`     (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JLT`     (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_LABEL`   (etykieta = cel skoku; 1 argument - numer etykiety)
   * `CODE_UNKNOWN` (tymczasowy typ instrukcji, której typu jeszcze nie jesteśmy w stanie określić)
   
 Jak widać - każda komenda przyjmuje do trzech argumentów, stąd nazwa: *kod trójadresowy*.  
