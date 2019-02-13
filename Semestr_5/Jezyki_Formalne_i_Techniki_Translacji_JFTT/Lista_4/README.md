@@ -9,7 +9,8 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
   1.1. [Tablica symboli](#11-tablica-symboli)  
   1.2. [Lekser (Flex)](#12-lekser-flex)
 2. [Analiza składniowa](#2-analiza-składniowa)  
-  2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia) 
+  2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia)  
+  2.2. [Parser (Bison)](#22-parser-bison) 
 3. [Kod pośredni](#kod-pośredni)
 4. [Asembler](#asembler)
 5. [Obsługa błędów](#obsługa-błędów)
@@ -121,3 +122,53 @@ Ale na obsługę błędów został poświęcony jeden osobny rozdział, który z
 Celem tej fazy jest sprawdzenie, czy ciąg tokenów zwracanych przez lekser da się dopasować do gramatyki (jeżeli nie, to jest błąd składniowy). Skutkiem ubocznym jest otrzymanie **drzewa wyprowadzenia**.
 
 ### 2.1. Drzewo wyprowadzenia
+Drzewo wyprowadzenia jest pierwszą postacią pośrednią na drodze do wynikowego kodu (proszę się nie bać tego, że *jest ich więcej* - wierzę, że później uda mi się przekonać Cię, że parę postaci wręcz ułatwia translację), jednakże nie jest niczym innym jak równoznacznym zapisaniem kodu programu wejściowego w postaci... drzewa.  
+
+W tym celu deklarujemy strukturę pojedynczej komendy:
+```c
+enum CommandType{
+    COM_PROGRAM,      
+    COM_COMMANDS,     
+        
+    COM_IS,           
+    
+    COM_NUM,          
+    COM_ARR,          
+    COM_PID,          
+    
+    COM_ADD,          
+    COM_SUB,          
+    COM_MUL,          
+    COM_DIV,          
+    COM_MOD,          
+    
+    COM_IF,           
+    COM_IFELSE,       
+    
+    COM_EQ,           
+    COM_NEQ,          
+    COM_LT,           
+    COM_GT,           
+    COM_LEQ,          
+    COM_GEQ,          
+    
+    COM_WHILE,        
+    COM_DO,           
+    
+    COM_FOR,          
+    COM_FORDOWN,      
+    
+    COM_READ,         
+    COM_WRITE         
+    
+};
+
+struct Command{
+    enum CommandType type;
+    int index;
+        
+    int size;
+    int maxSize;
+    struct Command** commands;
+};
+```
