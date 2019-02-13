@@ -5,6 +5,7 @@ Witaj, drogi czytelniku. Jeśli tu dotarłeś, to albo interesuje Cię temat kom
 Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompilatora, a stosunkowo dobry wynik w rankingu - drugie miejsce - utwierdził mnie w tym postawnowieniu. 
 
 ## Spis treści
+0. [Specyfikacja kompilatora](#0-specyfikacja-kompilatora)
 1. [Analiza leksykalna](#1-analiza-leksykalna)  
   1.1. [Tablica symboli](#11-tablica-symboli)  
   1.2. [Lekser (Flex)](#12-lekser-flex)
@@ -415,7 +416,7 @@ Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale
 
 ## 3. Kod pośredni
 Głównym celem zamiany drzewa wyprowadzenia na kod pośredni jest chęć pozbycia się konstrukcji, które najbardziej odstają od wynikowego kodu asemblera: pętli i (w mniejszym stopniu) instrukcji warunkowych.  
-Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje (pełna definicja maszyny rejestrowej będzie w nastepnym rozdziale): `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). Dzięki takiemu zabiegowi będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
+Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje: `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). Dzięki takiemu zabiegowi będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
 
 ### 3.1. Kod trójadresowy
 Kod trójadresowy jest następującej postaci:
@@ -457,3 +458,27 @@ struct CodeCommand{
     int args[6];
 };
 ```
+Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
+1. Instrukcje z języka wejściowego:  
+  * `CODE_READ`
+  * `CODE_WRITE`
+  * `CODE_ADD`
+  * `CODE_SUB`
+  * `CODE_MUL`
+  * `CODE_DIV`
+  * `CODE_MOD`
+  
+2. Instrukcje maszyny rejestrowej:
+  * `CODE_HALF`
+  * `CODE_INC`
+  * `CODE_DEC`
+  * `CODE_JUMP`
+  * `CODE_JZERO`
+  
+3. Instrukcje dodane:
+  * `CODE_JNEQ`    
+  * `CODE_JEQ`    
+  * `CODE_JGEQ`    
+  * `CODE_JLEQ`    
+  * `CODE_JGT`       
+  * `CODE_JLT`     
