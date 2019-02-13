@@ -8,10 +8,10 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 1. [Analiza leksykalna](#1-analiza-leksykalna)  
   1.1. [Tablica symboli](#11-tablica-symboli)  
   1.2. [Lekser (Flex)](#12-lekser-flex)
-2. [Analiza składniowa](#2-analiza-skladniowa)
-3. [Kod pośredni](#kod-posredni)
+2. [Analiza składniowa](#2-analiza-składniowa)
+3. [Kod pośredni](#kod-pośredni)
 4. [Asembler](#asembler)
-5. [Obsługa błędów](#obsluga-bledow)
+5. [Obsługa błędów](#obsługa-błędów)
 6. [Optymalizacje](#optymalizacje)
 
 
