@@ -104,7 +104,9 @@ W lekserze są dwa stany:
 ```
 Pierwszy z nich obsługuje dodanie do tablicy symboli *nieznanego symbolu* (w tym czasie nie wiemy jeszcze, czy jest to zmienna, czy tablica), a drugi pozwala na dodanie iteratora pętli for.  
 Użycie stałej zwraca jej indeks w tablicy symboli (jeżeli jeszcze nie była użyta, to zostaje dodana).  
-Znalezienie identyfikatora w innym stanie oznacza użycie zmiennej, więc zwracany jest jej indeks w tablicy symboli.
+Znalezienie identyfikatora w innym stanie oznacza użycie zmiennej, więc zwracany jest jej indeks w tablicy symboli.  
+
+Funkcje dodające są raczej trywialne, więc pozwolę sobie pominąć ich implementację. Jedynym zastanawiającym szczegółem może być dodawanie iteratora, podczas której sztucznie jest dodawana dodatkowa zmienna, która będzie przechowywać liczbę pozostałych iteracji pętli. O powodach, wadach i zaletach tego rozwiązania powiemy sobie później.
 
 #### Obsługa błędów
 W tej fazie wykrywane są błędy w stylu: 
