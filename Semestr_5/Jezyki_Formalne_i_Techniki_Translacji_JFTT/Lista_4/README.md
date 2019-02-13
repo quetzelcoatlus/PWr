@@ -11,7 +11,8 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 2. [Analiza składniowa](#2-analiza-składniowa)  
   2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia)  
   2.2. [Parser (Bison)](#22-parser-bison) 
-3. [Kod pośredni](#3-kod-pośredni)
+3. [Kod pośredni](#3-kod-pośredni)  
+  3.1 [Kod trójadresowy](#31-kod-trójadresowy)
 4. [Asembler](#4-asembler)
 5. [Obsługa błędów](#5-obsługa-błędów)
 6. [Optymalizacje](#6-optymalizacje)
@@ -177,7 +178,7 @@ Gdzie `type` oznacza typ komendy, `index` to indeks w tablicy symboli (przysług
 Funkcje, które będą to drzewo tworzyć, zostaną opisane w następnym podrozdziale.
 
 ### 2.2. Parser (Bison)
-Zajmiemy się teraz budową parsera (na szczęście zrobi to za nas Bison; my tylko podamy mu reguły, którymi ma się kierować). Jako że użytych jest w nim wiele funkcji budujących drzewo wyprowadzenia, które mogą wymagać wyjaśnienia, przejdziemy się przez cały plik definiujący parser, krok po kroku opisując dziejące się akcje. Nie będę dokładnie opisywał działania Bisona, zainteresowanych zapraszam do lektury listy [trzeciej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_3).
+Zajmiemy się teraz budową parsera (na szczęście zrobi to za nas Bison; my tylko podamy mu reguły, którymi ma się kierować). Jako że użytych jest w nim wiele funkcji budujących drzewo wyprowadzenia, które mogą wymagać wyjaśnienia, przejdziemy się przez cały plik definiujący parser, krok po kroku opisując dziejące się akcje. Nie będę dokładnie opisywał struktury reguł Bisona, zainteresowanych zapraszam do lektury listy [trzeciej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_3).
 
 #### Definicje
 Na początku definiujemy typy, które będą używane w regułach:
@@ -413,3 +414,6 @@ Sztuczne dodanie licznika pozostałych iteracji trochę kompilikuje sprawę, bo 
 Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale też zostaje ona przeniesiona do osobnego rozdziału.
 
 ## 3. Kod pośredni
+Głównym celem zamiany drzewa wyprowadzenia na kod pośredni jest chęć pozbycia się konstrukcji, które najbardziej odstają od wynikowego kodu asemblera: pętli i (w mniejszym stopniu) instrukcji warunkowych. Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje (pełna definicja maszyny rejestrowej będzie w nastepnym rozdziale): `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ`, `JGT` i `JLT`. Dzięki takiemu zabiegowi będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, którą będzie nasz kod pośredni jest **kod trójadresowy**.
+
+### 3.1. Kod trójadresowy
