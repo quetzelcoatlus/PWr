@@ -460,25 +460,27 @@ struct CodeCommand{
 ```
 Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
 1. Instrukcje z języka wejściowego:  
-  * `CODE_READ`
-  * `CODE_WRITE`
-  * `CODE_ADD`
-  * `CODE_SUB`
-  * `CODE_MUL`
-  * `CODE_DIV`
-  * `CODE_MOD`
+  * `CODE_READ` (1 argument - zmienna do wczytania)
+  * `CODE_WRITE` (1 argument - zmienna do wypisania)
+  * `CODE_ADD` (3 argumenty - zmienna docelowa, składnik, składnik)
+  * `CODE_SUB` (3 argumenty - zmienna docelowa, odjemna, odjemnik)
+  * `CODE_MUL` (3 argumenty - zmienna docelowa, czynnik, czynnik)
+  * `CODE_DIV` (3 argumenty - zmienna docelowa, dzielna, dzielnik)
+  * `CODE_MOD` (3 argumenty - zmienna docelowa, dzielna, dzielnik)
   
 2. Instrukcje maszyny rejestrowej:
-  * `CODE_HALF`
-  * `CODE_INC`
-  * `CODE_DEC`
-  * `CODE_JUMP`
-  * `CODE_JZERO`
+  * `CODE_HALF`(1 argument - zmienna)
+  * `CODE_INC` (1 argument - zmienna)
+  * `CODE_DEC` (1 argument - zmienna)
+  * `CODE_JUMP` (1 argument - etykieta skoku)
+  * `CODE_JZERO` (2 argumenty - etykieta skoku, zmienna)
   
 3. Instrukcje dodane:
-  * `CODE_JNEQ`    
-  * `CODE_JEQ`    
-  * `CODE_JGEQ`    
-  * `CODE_JLEQ`    
-  * `CODE_JGT`       
-  * `CODE_JLT`     
+  * `CODE_JNEQ` (3 argumenty - etykieta, zmienna, zmienna)
+  * `CODE_JEQ`  (3 argumenty - etykieta, zmienna, zmienna)
+  * `CODE_JGEQ` (3 argumenty - etykieta, zmienna, zmienna)
+  * `CODE_JLEQ` (3 argumenty - etykieta, zmienna, zmienna)  
+  * `CODE_JGT`  (3 argumenty - etykieta, zmienna, zmienna)
+  * `CODE_JLT`  (3 argumenty - etykieta, zmienna, zmienna)
+  * `CODE_LABEL` (etykieta = cel skoku; 1 argument - numer etykiety)
+  * `CODE_UNKNOWN` (tymczasowy typ instrukcji, której typu jeszcze nie jesteśmy w stanie określić)
