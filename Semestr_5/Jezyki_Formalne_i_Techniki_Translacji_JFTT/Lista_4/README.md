@@ -11,10 +11,10 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 2. [Analiza składniowa](#2-analiza-składniowa)  
   2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia)  
   2.2. [Parser (Bison)](#22-parser-bison) 
-3. [Kod pośredni](#kod-pośredni)
-4. [Asembler](#asembler)
-5. [Obsługa błędów](#obsługa-błędów)
-6. [Optymalizacje](#optymalizacje)
+3. [Kod pośredni](#3-kod-pośredni)
+4. [Asembler](#4-asembler)
+5. [Obsługa błędów](#5-obsługa-błędów)
+6. [Optymalizacje](#6-optymalizacje)
 
 
 ## 1. Analiza leksykalna
@@ -404,3 +404,8 @@ Akcje te tworzą komendę, która ma pięcioro dzieci:
 * komendy
 
 Sztuczne dodanie licznika pozostałych iteracji trochę kompilikuje sprawę, bo wprowadzamy do drzewa element, którego nie było w wejściowej gramatyce, ale wyjaśnienie potrzeby jego użycia przestanie być tajemnicą już następnym rozdziale!
+
+#### Obsługa błędów
+Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale też zostaje ona przeniesiona do osobnego rozdziału.
+
+## 3. Kod pośredni
