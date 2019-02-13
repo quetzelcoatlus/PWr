@@ -8,7 +8,7 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 1. [Analiza leksykalna](#1-analiza-leksykalna)  
   1.1. [Tablica symboli](#11-tablica-symboli)  
   1.2. [Lekser (Flex)](#12-lekser-flex)
-2. [Analiza składniowa](#analiza-skladniowa)
+2. [Analiza składniowa](#2-analiza-skladniowa)
 3. [Kod pośredni](#kod-posredni)
 4. [Asembler](#asembler)
 5. [Obsługa błędów](#obsluga-bledow)
@@ -114,3 +114,6 @@ W tej fazie wykrywane są błędy w stylu:
 * użycie niezadeklarowanej zmiennej
 
 Ale na obsługę błędów został poświęcony jeden osobny rozdział, który zbiera sprawdzanie błędów ze wszystkich faz, więc na razie pominiemy ten aspekt.
+
+
+## 2. Analiza składniowa
