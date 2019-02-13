@@ -330,3 +330,69 @@ condition
 | value GEQ value       { $$ = create_parent_command(COM_GEQ, 2, $1, $3); }
 ;
 ```
+W powyższych regułach kierujemy się jedną zasadą: otrzymujemy ileś komend dzieci i tworzymy dla nich rodzica o określonym typie (wyjaśnienie akcji dla FOR-ów znajdzie się trochę niżej). Służy do tego następująca funkcja:
+```c
+struct Command* create_parent_command(enum CommandType type, int numberOfChilds, ...){  
+    va_list ap;
+    va_start(ap, numberOfChilds); 
+    
+    struct Command* c = malloc(sizeof(struct Command));
+    c->type = type;
+    c->index = -1;
+    c->size = numberOfChilds;
+    c->maxSize = numberOfChilds;
+    c->commands = malloc(sizeof(struct Command*) * numberOfChilds);
+ 
+    for(int i = 0; i < noumberOfChilds; i++){
+        c->commands[i] = va_arg(ap, struct Command*);
+    }
+    
+    va_end(ap);
+    
+    return c;
+}
+```
+Funkcja ta przyjmuje nastepujące argumenty: typ komendy rodzica, liczbę jego dzieci oraz kolejno jego dzieci (`...` sprawia, że możemy podać dowolną liczbę argumentów do funkcji). Struktura `ap_list` oraz funkcje `va_start`, `va_arg` i `va_end` z `<stdarg.h>` pozwalają na stosunkowe łatwe iterowanie po argumentach funkcji, więc jedyne co musimy zrobić to stworzyć komendę rodzica i umieścić jego dzieci w jego tablicy potomków.
+
+---
+
+```scala
+value
+: NUM                   { $$ = create_value_command(COM_NUM, $1); }
+| identifier            { $$ = $1; }
+; 
+
+identifier
+: PID                   { $$ = create_value_command(COM_PID, $1); }
+| PID LBR PID RBR       { $$ = create_parent_command(COM_ARR, 2, create_value_command(COM_PID, $1), create_value_command(COM_PID, $3)); }
+| PID LBR NUM RBR       { $$ = create_parent_command(COM_ARR, 2, create_value_command(COM_PID, $1), create_value_command(COM_NUM, $3)); }
+;
+```
+W końcu doszliśmy do liści drzewa, czyli komend, które zawierają indeksy z tablicy symboli. Są 4 możliwości:
+* stała
+* zmienna
+* tablica od stałej
+* tablica od zmiennej
+
+Dla każdej z nich odpowiednio używamy funkcji do tworzenia komendy *z wartością*:
+```c
+struct Command* create_value_command(enum CommandType type, int index){
+    struct Command* c = malloc(sizeof(struct Command));
+    c->type = type;
+    c->index = index;
+    c->size = 0;
+    c->maxSize = 0;
+    c->commands = NULL;
+    
+    return c;
+}
+```
+Jak widać, nie ma ona dzieci - jedynie co przechowuje to informację o typie oraz wartość `index`, czyli indeks w tablicy symboli.
+
+---
+
+Wróćmy zatem jeszcze na moment do pętli FOR:
+```scala
+| FOR PID FROM value TO value DO commands ENDFOR        { $$ = create_parent_command(COM_FOR,     5, create_value_command(COM_PID, $2), create_value_command(COM_PID, $2+1),$4, $6, $8); }
+| FOR PID FROM value DOWNTO value DO commands ENDFOR    { $$ = create_parent_command(COM_FORDOWN, 5, create_value_command(COM_PID, $2), create_value_command(COM_PID, $2+1),$4, $6, $8); }
+```
