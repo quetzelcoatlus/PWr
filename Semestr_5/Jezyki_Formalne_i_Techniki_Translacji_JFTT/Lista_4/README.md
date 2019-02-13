@@ -472,15 +472,19 @@ Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
   * `CODE_HALF`(1 argument - zmienna)
   * `CODE_INC` (1 argument - zmienna)
   * `CODE_DEC` (1 argument - zmienna)
-  * `CODE_JUMP` (1 argument - etykieta skoku)
-  * `CODE_JZERO` (2 argumenty - etykieta skoku, zmienna)
+  * `CODE_JUMP` (1 argument - numer etykiety)
+  * `CODE_JZERO` (2 argumenty - numer etykiety, zmienna)
   
 3. Instrukcje dodane:
-  * `CODE_JNEQ` (3 argumenty - etykieta, zmienna, zmienna)
-  * `CODE_JEQ`  (3 argumenty - etykieta, zmienna, zmienna)
-  * `CODE_JGEQ` (3 argumenty - etykieta, zmienna, zmienna)
-  * `CODE_JLEQ` (3 argumenty - etykieta, zmienna, zmienna)  
-  * `CODE_JGT`  (3 argumenty - etykieta, zmienna, zmienna)
-  * `CODE_JLT`  (3 argumenty - etykieta, zmienna, zmienna)
+  * `CODE_JNEQ` (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JEQ`  (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JGEQ` (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JLEQ` (3 argumenty - numer etykiety, zmienna, zmienna)  
+  * `CODE_JGT`  (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JLT`  (3 argumenty - numer etykiety, zmienna, zmienna)
   * `CODE_LABEL` (etykieta = cel skoku; 1 argument - numer etykiety)
   * `CODE_UNKNOWN` (tymczasowy typ instrukcji, której typu jeszcze nie jesteśmy w stanie określić)
+  
+Jak widać - każda komenda przyjmuje do trzech argumentów, stąd nazwa: *kod trójadresowy*.  
+
+`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera argumenty instrukcji. Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!"
