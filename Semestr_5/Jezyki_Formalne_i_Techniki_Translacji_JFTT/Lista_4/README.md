@@ -477,10 +477,10 @@ Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
   * `CODE_JZERO` (2 argumenty - numer etykiety, zmienna)
   
 3. Instrukcje dodane:
-  * `CODE_JNEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JEQ`     (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JGEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JLEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)  
+  * `CODE_JNEQ   ` (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JEQ    ` (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JGEQ   ` (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JLEQ   ` (3 argumenty - numer etykiety, zmienna, zmienna)  
   * `CODE_JGT`     (3 argumenty - numer etykiety, zmienna, zmienna)
   * `CODE_JLT`     (3 argumenty - numer etykiety, zmienna, zmienna)
   * `CODE_LABEL`   (etykieta = cel skoku; 1 argument - numer etykiety)
