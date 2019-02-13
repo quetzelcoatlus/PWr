@@ -12,7 +12,7 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
   2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia)  
   2.2. [Parser (Bison)](#22-parser-bison) 
 3. [Kod pośredni](#3-kod-pośredni)  
-  3.1 [Kod trójadresowy](#31-kod-trójadresowy)
+  3.1. [Kod trójadresowy](#31-kod-trójadresowy)
 4. [Asembler](#4-asembler)
 5. [Obsługa błędów](#5-obsługa-błędów)
 6. [Optymalizacje](#6-optymalizacje)
