@@ -191,7 +191,7 @@ Na początku definiujemy typy, które będą używane w regułach:
 `ptr` posłuży jak typ komend, z których będzie budowane drzewo wyprowadzenia.  
 
 Następnie deklarujemy tokeny, które otrzymamy z leksera:  
-Te nieniosące wartości:
+Te, które nie niosą żadnej wartości:
 ```
 %token DECLARE IN END
 
@@ -221,3 +221,26 @@ Na końcu deklarujemy, które reguły gramatyki niosą ze sobą informację w po
 %type <ptr> condition
 %type <ptr> value
 ```
+
+
+#### Reguły gramatyki
+Reguły zostały praktycznie jeden do jednego przepisane z gramatyki języka wejściowego. Jedynie należało umiejętnie dodać akcje, które się wykonają podczas przetwarzania:
+
+```
+program
+: DECLARE declarations IN commands END {create_program($4);}
+;
+```
+
+Coś tam...
+
+---
+
+```
+declarations
+: %empty
+| declarations PID SEM                          {set_variable($2);} 
+| declarations PID LBR NUM COL NUM RBR SEM      {if(set_array($2, $4, $6) < 0) yyerror("Zly zakres tablicy");} 
+;
+```
+Coś kolejnego
