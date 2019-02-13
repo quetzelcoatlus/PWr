@@ -172,3 +172,52 @@ struct Command{
     struct Command** commands;
 };
 ```
+Gdzie `type` oznacza typ komendy, `index` to indeks w tablicy symboli (przysługuje tylko identyfikatorom zmiennych i stałym czyli odpowiednio `COM_PID` oraz `COM_NUM` - takie komendy można uznać za *liście* drzewa), a `size`, `maxSize` i `commands` stanowią razem tablicę dynamiczną, w której umieszczane są dzieci (podkomendy) danej komendy (takie konstrukcje będą się przewijały przez różne struktury i prawdopodobnie w każdym miejscu można, jeżeli jest dostępny, użyć *wektora*).  
+
+Funkcje, które będą to drzewo tworzyć, zostaną opisane w następnym podrozdziale.
+
+### 2.2. Parser (Bison)
+Zajmiemy się teraz budową parsera (na szczęście zrobi to za nas Bison; my tylko podamy mu reguły, którymi ma się kierować). Jako że użytych jest w nim wiele funkcji budujących drzewo wyprowadzenia, które mogą wymagać wyjaśnienia, przejdziemy się przez cały plik definiujący parser, krok po kroku opisując dziejące się akcje.
+
+#### Definicje
+Na początku definiujemy typy, które będą używane w regułach:
+```
+%union{
+    int val; 
+    struct Command* ptr;
+}
+```
+`val`, czyli typ `int` odnosi się do tokenów zwracanych przez lekser, które zawierają indeks z tablicy symboli.  
+`ptr` posłuży jak typ komend, z których będzie budowane drzewo wyprowadzenia.  
+
+Następnie deklarujemy tokeny, które otrzymamy z leksera:  
+Te nieniosące wartości:
+```
+%token DECLARE IN END
+
+%token IS
+%token IF THEN ELSE ENDIF
+%token WHILE DO ENDWHILE ENDDO 
+%token FOR FROM TO DOWNTO ENDFOR
+%token READ
+%token WRITE 
+
+%token ADD SUB MUL DIV MOD       
+%token EQ NEQ LT GT LEQ GEQ
+
+%token LBR RBR COL SEM
+```
+Oraz te, które zawierają indeks z tablicy symboli:
+```
+%token <val> PID
+%token <val> NUM
+```
+Na końcu deklarujemy, które reguły gramatyki niosą ze sobą informację w postaci komendy:
+```
+%type <ptr> command
+%type <ptr> commands
+%type <ptr> identifier
+%type <ptr> expression
+%type <ptr> condition
+%type <ptr> value
+```
