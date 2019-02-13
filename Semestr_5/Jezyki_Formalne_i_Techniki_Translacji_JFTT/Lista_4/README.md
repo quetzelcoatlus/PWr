@@ -8,7 +8,8 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
 1. [Analiza leksykalna](#1-analiza-leksykalna)  
   1.1. [Tablica symboli](#11-tablica-symboli)  
   1.2. [Lekser (Flex)](#12-lekser-flex)
-2. [Analiza składniowa](#2-analiza-składniowa)
+2. [Analiza składniowa](#2-analiza-składniowa)  
+  2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia) 
 3. [Kod pośredni](#kod-pośredni)
 4. [Asembler](#asembler)
 5. [Obsługa błędów](#obsługa-błędów)
@@ -102,7 +103,7 @@ W lekserze są dwa stany:
 %s declare
 %s for_loop
 ```
-Pierwszy z nich obsługuje dodanie do tablicy symboli *nieznanego symbolu* (w tym czasie nie wiemy jeszcze, czy jest to zmienna, czy tablica), a drugi pozwala na dodanie iteratora pętli for.  
+Pierwszy z nich obsługuje dodanie do tablicy symboli *nieznanego symbolu* (w tym czasie nie wiemy jeszcze, czy jest to zmienna, czy tablica), a drugi pozwala na dodanie iteratora pętli for. Zwrócony zostaje indeks dodanego symbolu.  
 Użycie stałej zwraca jej indeks w tablicy symboli (jeżeli jeszcze nie była użyta, to zostaje dodana).  
 Znalezienie identyfikatora w innym stanie oznacza użycie zmiennej, więc zwracany jest jej indeks w tablicy symboli.  
 
@@ -117,3 +118,6 @@ Ale na obsługę błędów został poświęcony jeden osobny rozdział, który z
 
 
 ## 2. Analiza składniowa
+Celem tej fazy jest sprawdzenie, czy ciąg tokenów zwracanych przez lekser da się dopasować do gramatyki (jeżeli nie, to jest błąd składniowy). Skutkiem ubocznym jest otrzymanie **drzewa wyprowadzenia**.
+
+### 2.1. Drzewo wyprowadzenia
