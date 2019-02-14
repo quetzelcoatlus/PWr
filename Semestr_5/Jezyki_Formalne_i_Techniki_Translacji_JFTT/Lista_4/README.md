@@ -13,8 +13,8 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
   2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia)  
   2.2. [Parser (Bison)](#22-parser-bison) 
 3. [Kod pośredni](#3-kod-pośredni)  
-  3.1. [Kod trójadresowy](#31-kod-trójadresowy)
-  3.2. [Transformacja drzewa do kodu pośredniego](#32-transformacja-drzewa-do-kodu-pośredniego)
+  3.1. [Kod trójadresowy](#31-kod-trójadresowy)  
+  3.2. [Transformacja drzewa wyprowadzenia do kodu pośredniego](#32-transformacja-drzewa-wyprowadzenia-do-kodu-pośredniego)  
 4. [Asembler](#4-asembler)
 5. [Obsługa błędów](#5-obsługa-błędów)
 6. [Optymalizacje](#6-optymalizacje)
@@ -489,7 +489,9 @@ Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
   
 Jak widać - każda komenda przyjmuje do trzech argumentów, stąd nazwa: *kod trójadresowy*.  
 
-`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera argumenty instrukcji.  
+Pole`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera argumenty instrukcji.  
+
 Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!". Sęk w tym, że operując na indeksach z tablicy symboli zmienna tablicowa jest w postaci pary: (indeks tablicy, indeks zmiennej/stałej). Dlatego też każda instrukcja ma trzy pary po dwa argumenty (dla stałych i zmiennych drugi argument jest równy -1 = NONE), żeby takie sytuacje uwzględnić i obsłużyć. Także ten kod można by nazwać raczej kodem *trójobiektowym* niż trójadresowym, ale dla przejrzystości pozostanę przy "starej" nazwie. 
 
-### 3.2. Transformacja drzewa do kodu pośredniego
+### 3.2. Transformacja drzewa wyprowadzenia do kodu pośredniego
+W tym podrozdziale skupimy się głównie na jednej rekurencyjnej funkcji (oraz paru maleńkich operujących na dynamicznej tablicy zawierającej instrukcje kodu pośredniego), która przechodzi po drzewie i przekształca je, komenda po komendzie, w kod trójadresowy.
