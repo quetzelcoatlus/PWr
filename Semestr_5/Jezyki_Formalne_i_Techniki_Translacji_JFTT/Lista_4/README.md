@@ -5,29 +5,29 @@ Witaj, drogi czytelniku. Jeśli tu dotarłeś, to albo interesuje Cię temat kom
 Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompilatora, a stosunkowo dobry wynik w rankingu - drugie miejsce - utwierdził mnie w tym postawnowieniu. 
 
 ## Spis treści
-0. [Specyfikacja kompilatora](#0-specyfikacja-kompilatora)
-1. [Analiza leksykalna](#1-analiza-leksykalna)  
-  1.1. [Tablica symboli](#11-tablica-symboli)  
-  1.2. [Lekser (Flex)](#12-lekser-flex)
-2. [Analiza składniowa](#2-analiza-składniowa)  
-  2.1. [Drzewo wyprowadzenia](#21-drzewo-wyprowadzenia)  
-  2.2. [Parser (Bison)](#22-parser-bison) 
-3. [Kod pośredni](#3-kod-pośredni)  
-  3.1. [Kod trójadresowy](#31-kod-trójadresowy)  
-  3.2. [Transformacja drzewa wyprowadzenia do kodu pośredniego](#32-transformacja-drzewa-wyprowadzenia-do-kodu-pośredniego)  
-4. [Asembler](#4-asembler)
-5. [Obsługa błędów](#5-obsługa-błędów)
-6. [Optymalizacje](#6-optymalizacje)
+1. [Specyfikacja kompilatora](#1-specyfikacja-kompilatora)
+2. [Analiza leksykalna](#2-analiza-leksykalna)  
+  2.1. [Tablica symboli](#21-tablica-symboli)  
+  2.2. [Lekser (Flex)](#22-lekser-flex)
+3. [Analiza składniowa](#3-analiza-składniowa)  
+  3.1. [Drzewo wyprowadzenia](#31-drzewo-wyprowadzenia)  
+  3.2. [Parser (Bison)](#32-parser-bison) 
+4. [Kod pośredni](#4-kod-pośredni)  
+  4.1. [Kod trójadresowy](#41-kod-trójadresowy)  
+  4.2. [Transformacja drzewa wyprowadzenia do kodu pośredniego](#42-transformacja-drzewa-wyprowadzenia-do-kodu-pośredniego)  
+5. [Asembler](#5-asembler)
+6. [Obsługa błędów](#6-obsługa-błędów)
+7. [Optymalizacje](#7-optymalizacje)
 
 
-## 1. Analiza leksykalna
+## 2. Analiza leksykalna
 Analiza leksykalna ma dwa główne cele:
 1. Rozpoznać słowa kluczowe oraz symbole języka wejściowego i zwrócić odpowiadające im tokeny.
 2. Obsłużyć zmienne i stałe, umieszczając je w tablicy symboli.
 
 Zanim rozpatrzymy te dwa punkty, najpierw zdefinujemy czym jest i jaki ma cel tablica symboli.
 
-### 1.1. Tablica symboli
+### 2.1. Tablica symboli
 Tablica symboli to struktura (niekoniecznie *tablica*), która przechowuje informacje o symolach. W moim przypadku symbolem jest jedno z poniższych:
 * zmienna
 * tablica
@@ -44,7 +44,7 @@ Informacje, które może zawierać tablica symboli, to na przykład:
 Dla tak określonej struktury symbolu, tablica symboli może być *tablicą dynamiczną* (jak w moim przypadku) bądź *wektorem* symboli.  
 Dodawanie do tablicy symboli omówimy w następnym podrozdziale, a czytanie dopiero wtedy, gdy będzie nam potrzebne. :)
 
-### 1.2. Lekser (Flex)
+### 2.2. Lekser (Flex)
 Zajmiemy się teraz budowaniem leksera przy użyciu Flex-a. Pozwolę sobie pominąć podstawy używania tego narzędzia (pragnącących je poznać zapraszam do lektury list [drugiej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_2) i [trzeciej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_3), które się na nich skupiają) i zająć się następującymi aspektami:
 
 #### Co musimy wczytać?
@@ -121,10 +121,10 @@ W tej fazie wykrywane są błędy w stylu:
 Ale na obsługę błędów został poświęcony jeden osobny rozdział, który zbiera sprawdzanie błędów ze wszystkich faz, więc na razie pominiemy ten aspekt.
 
 
-## 2. Analiza składniowa
+## 3. Analiza składniowa
 Celem tej fazy jest sprawdzenie, czy ciąg tokenów zwracanych przez lekser da się dopasować do gramatyki (jeżeli nie, to jest błąd składniowy). Skutkiem ubocznym jest otrzymanie **drzewa wyprowadzenia**.
 
-### 2.1. Drzewo wyprowadzenia
+### 3.1. Drzewo wyprowadzenia
 Drzewo wyprowadzenia jest pierwszą postacią pośrednią na drodze do wynikowego kodu (proszę się nie bać tego, że *jest ich więcej* - wierzę, że później uda mi się przekonać Cię, że parę postaci wręcz ułatwia translację), jednakże nie jest niczym innym jak równoznacznym zapisaniem kodu programu wejściowego w postaci... drzewa.  
 
 W tym celu deklarujemy strukturę pojedynczej komendy:
@@ -179,7 +179,7 @@ Gdzie `type` oznacza typ komendy, `index` to indeks w tablicy symboli (przysług
 
 Funkcje, które będą to drzewo tworzyć, zostaną opisane w następnym podrozdziale.
 
-### 2.2. Parser (Bison)
+### 3.2. Parser (Bison)
 Zajmiemy się teraz budową parsera (na szczęście zrobi to za nas Bison; my tylko podamy mu reguły, którymi ma się kierować). Jako że użytych jest w nim wiele funkcji budujących drzewo wyprowadzenia, które mogą wymagać wyjaśnienia, przejdziemy się przez cały plik definiujący parser, krok po kroku opisując dziejące się akcje. Nie będę dokładnie opisywał struktury reguł Bisona, zainteresowanych zapraszam do lektury listy [trzeciej](https://github.com/quetzelcoatlus/PWr/tree/master/Semestr_5/Jezyki_Formalne_i_Techniki_Translacji_JFTT/Lista_3).
 
 #### Definicje
@@ -415,12 +415,12 @@ Sztuczne dodanie licznika pozostałych iteracji trochę kompilikuje sprawę, bo 
 #### Obsługa błędów
 Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale też zostaje ona przeniesiona do osobnego rozdziału.
 
-## 3. Kod pośredni
+## 4. Kod pośredni
 Głównym celem zamiany drzewa wyprowadzenia na kod pośredni jest chęć pozbycia się konstrukcji, które najbardziej odstają od wynikowego kodu asemblera: pętli i (w mniejszym stopniu) instrukcji warunkowych.  
 Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje: `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). A skoro mamy skoki, to potrzebujemy też miejsca do którego będziemy skakać. Żeby nie musieć operować na rzeczywistych instrukcjach, które mogą się zmieniać, wprowadzamy **etykiety**. Będą to *bezpostaciowe* instrukcje z unikatowym identyfikatorem, więc będziemy potrzebowali jedynie zapamiętać jedną liczbę w instrukcji skoku. W praktyce skok "na etykietę" będzie oznaczać skok na instrukcję znajdującą się bezpośrednio po niej.  
 Dzięki takim zabiegom będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
 
-### 3.1. Kod trójadresowy
+### 4.1. Kod trójadresowy
 Struktura kodu trójadresowego jest następującej postaci:
 ```c
 enum CodeType{
@@ -493,5 +493,5 @@ Pole`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera ar
 
 Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!". Sęk w tym, że operując na indeksach z tablicy symboli zmienna tablicowa jest w postaci pary: (indeks tablicy, indeks zmiennej/stałej). Dlatego też każda instrukcja ma trzy pary po dwa argumenty (dla stałych i zmiennych drugi argument jest równy -1 = NONE), żeby takie sytuacje uwzględnić i obsłużyć. Także ten kod można by nazwać raczej kodem *trójobiektowym* niż trójadresowym, ale dla przejrzystości pozostanę przy "starej" nazwie. 
 
-### 3.2. Transformacja drzewa wyprowadzenia do kodu pośredniego
+### 4.2. Transformacja drzewa wyprowadzenia do kodu pośredniego
 W tym podrozdziale skupimy się głównie na jednej rekurencyjnej funkcji (oraz paru maleńkich operujących na dynamicznej tablicy zawierającej instrukcje kodu pośredniego), która przechodzi po drzewie i przekształca je, komenda po komendzie, w kod trójadresowy.
