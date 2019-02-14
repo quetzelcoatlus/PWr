@@ -14,6 +14,7 @@ Pomysł, żeby stworzyć taki poradnik zrodził się już podczas pisania kompil
   2.2. [Parser (Bison)](#22-parser-bison) 
 3. [Kod pośredni](#3-kod-pośredni)  
   3.1. [Kod trójadresowy](#31-kod-trójadresowy)
+  3.2. [Transformacja drzewa do kodu pośredniego](#32-transformacja-drzewa-do-kodu-pośredniego)
 4. [Asembler](#4-asembler)
 5. [Obsługa błędów](#5-obsługa-błędów)
 6. [Optymalizacje](#6-optymalizacje)
@@ -416,7 +417,7 @@ Tak samo, jak w poprzedniej fazie, w tej też występuje obsługa błędów, ale
 
 ## 3. Kod pośredni
 Głównym celem zamiany drzewa wyprowadzenia na kod pośredni jest chęć pozbycia się konstrukcji, które najbardziej odstają od wynikowego kodu asemblera: pętli i (w mniejszym stopniu) instrukcji warunkowych.  
-Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje: `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). A skoro mamy skoki, to potrzebujemy też miejsca do którego będziemy skakać. Żeby nie musieć operować na rzeczywistych instrukcjach, które mogą się zmieniać, wprowadzamy **etykiety**. Będą to *bezpostaciowe* instrukcje z unikatowym identyfikatorem, więc będziemy potrzebowali jedynie zapamiętać jedną liczbę przy skoku. W praktyce skok na etykietę będzie oznaczać skok na instrukcję znajdującą się bezpośrednio po niej.  
+Taka dwuetapowa translacja (program -> kod pośredni -> asembler) moim zdaniem znacznie ułatwia zadanie i znacznie redukuje nakład pracy potrzebny do przetłumaczenia niektórych konstrukcji. Jako że w programie wejściowym mamy możliwe następujące relacje porównawcze: `=`, `!=`, `<`, `>`, `<=` i `>=`, a w maszynie rejestrowej mamy dostępne jedynie następujące instrukcje: `JUMP` (skok bezwarunkowy), `JZERO` (skok dla zerowej wartości) i `JODD` (skok dla nieparzystej wartości), do kodu pośredniego dodamy *kompromis* między nimi, czyli następujące instrukcje: `JEQ` (skok dla równych liczb), `JNEQ` (dla nierównych), `JGEQ` (pierwsza większa bądź równa drugiej), `JLEQ` (mniejsza bądź równa), `JGT` (większa) i `JLT` (mniejsza). A skoro mamy skoki, to potrzebujemy też miejsca do którego będziemy skakać. Żeby nie musieć operować na rzeczywistych instrukcjach, które mogą się zmieniać, wprowadzamy **etykiety**. Będą to *bezpostaciowe* instrukcje z unikatowym identyfikatorem, więc będziemy potrzebowali jedynie zapamiętać jedną liczbę w instrukcji skoku. W praktyce skok "na etykietę" będzie oznaczać skok na instrukcję znajdującą się bezpośrednio po niej.  
 Dzięki takim zabiegom będziemy w stanie zamienić pętle na *bardziej podstawowe* instrukcje. Strukturą, która będzie opisywać instukcje naszego kodu pośredniego jest **kod trójadresowy**.
 
 ### 3.1. Kod trójadresowy
@@ -490,3 +491,5 @@ Jak widać - każda komenda przyjmuje do trzech argumentów, stąd nazwa: *kod t
 
 `size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera argumenty instrukcji.  
 Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!". Sęk w tym, że operując na indeksach z tablicy symboli zmienna tablicowa jest w postaci pary: (indeks tablicy, indeks zmiennej/stałej). Dlatego też każda instrukcja ma trzy pary po dwa argumenty (dla stałych i zmiennych drugi argument jest równy -1 = NONE), żeby takie sytuacje uwzględnić i obsłużyć. Także ten kod można by nazwać raczej kodem *trójobiektowym* niż trójadresowym, ale dla przejrzystości pozostanę przy "starej" nazwie. 
+
+### 3.2. Transformacja drzewa do kodu pośredniego
