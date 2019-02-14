@@ -477,10 +477,10 @@ Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
   * `CODE_JZERO` (2 argumenty - numer etykiety, zmienna)
   
 3. Instrukcje dodane:
-  * `CODE_JNEQ   ` (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JEQ    ` (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JGEQ   ` (3 argumenty - numer etykiety, zmienna, zmienna)
-  * `CODE_JLEQ   ` (3 argumenty - numer etykiety, zmienna, zmienna)  
+  * `CODE_JNEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JEQ`     (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JGEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)
+  * `CODE_JLEQ`    (3 argumenty - numer etykiety, zmienna, zmienna)  
   * `CODE_JGT`     (3 argumenty - numer etykiety, zmienna, zmienna)
   * `CODE_JLT`     (3 argumenty - numer etykiety, zmienna, zmienna)
   * `CODE_LABEL`   (etykieta = cel skoku; 1 argument - numer etykiety)
@@ -488,4 +488,5 @@ Gdzie `type` oznacza typ instrukcji. Typy można pogrupować nastepująco:
   
 Jak widać - każda komenda przyjmuje do trzech argumentów, stąd nazwa: *kod trójadresowy*.  
 
-`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera argumenty instrukcji. Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!"
+`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera argumenty instrukcji.  
+Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!". Sęk w tym, że operując na indeksach z tablicy symboli zmienna tablicowa jest w postaci pary: (indeks tablicy, indeks zmiennej/stałej). Dlatego też każda instrukcja ma trzy pary po dwa argumenty (dla stałych i zmiennych drugi argument jest równy -1 = NONE), żeby takie sytuacje uwzględnić i obsłużyć. Także ten kod można by nazwać raczej kodem *trójobiektowym* niż trójadresowym, ale dla przejrzystości pozostanę przy "starej" nazwie. 
