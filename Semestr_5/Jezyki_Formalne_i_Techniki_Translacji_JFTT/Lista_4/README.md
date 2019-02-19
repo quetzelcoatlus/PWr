@@ -494,4 +494,145 @@ Pole`size` określa liczbę obecnych argumentów instrukcji, a `args` zawiera ar
 Każdy uważny czytelnik powinien teraz zadać pytanie: "Jeżeli to kod **trój**adresowy, to czemu pole `args` jest tablicą **6**-elementową?!". Sęk w tym, że operując na indeksach z tablicy symboli zmienna tablicowa jest w postaci pary: (indeks tablicy, indeks zmiennej/stałej). Dlatego też każda instrukcja ma trzy pary po dwa argumenty (dla stałych i zmiennych drugi argument jest równy -1 = NONE), żeby takie sytuacje uwzględnić i obsłużyć. Także ten kod można by nazwać raczej kodem *trójobiektowym* niż trójadresowym, ale dla przejrzystości pozostanę przy "starej" nazwie. 
 
 ### 4.2. Transformacja drzewa wyprowadzenia do kodu pośredniego
-W tym podrozdziale skupimy się głównie na jednej rekurencyjnej funkcji (oraz paru maleńkich operujących na dynamicznej tablicy zawierającej instrukcje kodu pośredniego), która przechodzi po drzewie i przekształca je, komenda po komendzie, w kod trójadresowy.
+W tym podrozdziale skupimy się głównie na jednej rekurencyjnej funkcji (oraz paru maleńkich operujących na dynamicznej tablicy zawierającej instrukcje kodu pośredniego), która przechodzi po drzewie i przekształca je, komenda po komendzie, w kod trójadresowy.  
+
+Funkcja ta jest następującej sygnatury:
+```c
+void transform_tree_r(struct Command* c);
+```
+Zatem w momencie wywołania otrzymuje wierzchołek drzewa wyprowadzenia i dla każdego rodzaju komendy będzie musiała wygenerować odpowiednie instrukcje kodu pośredniego używając rekurencji do przetwarzania dzieci komendy.  
+
+Rozpoczęcie transformacji wywołuję powyższą funkcję od korzenia drzewa wyprowadzenia:
+```c
+void transform_tree_to_code(){   
+    transform_tree_r(program);
+}
+```
+W ciele funkcji `transform_tree_r` znajduje się jeden duży `switch`:
+```c
+switch(c->type){
+...
+}
+```
+który w zależności od typu komendy wykona jakieś czynności. Wszystkie przypadki zostaną opisane w następujących podpodrozdziałach.
+
+#### 4.2.1 Blok komend
+```c
+case COM_PROGRAM:
+case COM_COMMANDS:
+    for(int i = 0; i < c->size; i++){  
+        transform_tree_r(c->commands[i]);
+    }
+    break; 
+}  
+```
+Blokiem komend może być, na przykład, cały program albo wnętrza pętli/instrukcji warunkowych. Jedyne, co musimy zrobić, to wywołać rekurencyjnie funkcję `transform_tree_r` dla każdego dziecka danej komendy (będzie to jednoznaczne z przetworzeniem każdej komendy tego bloku w dobrej kolejności.
+
+#### 4.2.2 Kopiowanie (Przypisanie)
+```c
+case COM_IS:
+    add_code_command(CODE_COPY);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+```
+Operacja przypisania zawiera dwa argumenty (dwoje dzieci w drzewie wyprowadzenia): 
+* obiekt (zmienna lub tablica) docelowy
+* obiekt do skopiowania (stała, zmienna, tablica) lub operacja matematyczna (dodawanie, odejmowanie, mnożenie, dzielenie, modulo dwóch liczb)
+
+Dlatego jedyne co musimy zrobić, to stworzyć komendę kodu pośredniego typu `CODE_COPY` przy użyciu funkcji `add_code_command`:
+```c
+void add_code_command(enum CodeType type){
+    if(codeProgram->size == codeProgram->maxSize)
+        resize_code();
+    
+    codeProgram->commands[codeProgram->size].type=type;
+    codeProgram->commands[codeProgram->size].size=0;
+    
+    codeProgram->size++;
+}
+```
+która jedynie dodaje pustą komendę o danym typie do dynamicznej tablicy (globalnej) `codeProgram` kodu pośredniego.  
+Następnie wywołujemy rekurencyjnie `transform_tree_r` dla dzieci komendy.
+
+#### 4.2.2 Zmienne, tablice, stałe
+Wiemy już jak dodać pustą komendę o danym typie, ale co w takim razie będzie jej argumentami? Jeśli dobrze pamiętasz, lekser zwracał dla każdej stałej lub identyfikatora jego indeks w tablicy symboli. W drzewie wyprowadzenia *liście* były tworzone przy pomocy funkcji `create_value_command` i również zawierały indeks z tablicy symboli. Tak samo będzie tutaj - wydobędziemy z komend drzewa wyprowadzenia indeksy i umieścimy je w kodzie pośrednim:
+
+```c
+ case COM_NUM:
+    add_arg_to_current_command(c->index);
+    add_arg_to_current_command(NONE);
+    break;
+
+case COM_PID:
+    add_arg_to_current_command(c->index);
+    add_arg_to_current_command(NONE);
+    break;
+
+case COM_ARR:
+    add_arg_to_current_command(c->commands[0]->index);
+    add_arg_to_current_command(c->commands[1]->index);
+    break;
+```
+Mamy tutaj trzy przypadki:
+* `COM_NUM` - stała
+* `COM_PID` - zmienna
+* `COM_ARR` - tablica
+
+W pierwszym i drugim przypadku jedyne co musimy zrobić to dodać do obecnej komendy indeks z tablicy symboli (`c->indeks`) oraz `NONE` (czyli de facto -1). W trzecim przypadku (tablica) wiemy, że dziećmi komendy są tablica oraz zmienna/stała i moglibyśmy rekurencyjnie je przetworzyć, ale zamiast tego wystarczy ręcznie dodać indeksy komend dzieci (`c->commands[0]->index` i `c->commands[1]->index`).  
+Do dodawania argumentu do obecnej komendy służy następująca funkcja:
+```c
+void add_arg_to_current_command(int arg){
+    int last = codeProgram->size - 1;
+    codeProgram->commands[last].args[codeProgram->commands[last].size] = arg;
+    codeProgram->commands[last].size++;
+}
+```
+która przypisuje argument w pierwsze wolne miejsce ostatniej komendy i zwiększa jej rozmiar.
+
+#### 4.2.3 Komendy READ, WRITE
+```c
+case COM_READ:
+    add_code_command(CODE_READ);
+    transform_tree_r(c->commands[0]);
+    break;
+
+case COM_WRITE:
+    add_code_command(CODE_WRITE);
+    transform_tree_r(c->commands[0]);
+    break;
+```
+`READ` i `WRITE` to proste, jednoargumentowe komendy, więc wystarczy dodać odpowiednią komendę i przetworzyć pierwszy argument.
+
+#### 4.2.4 Operacje matematyczne
+```c
+case COM_ADD:
+    set_type_of_current_command(CODE_ADD);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+
+case COM_SUB:
+    set_type_of_current_command(CODE_SUB);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+
+case COM_MUL:
+    set_type_of_current_command(CODE_MUL);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+
+case COM_DIV:
+    set_type_of_current_command(CODE_DIV);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+
+case COM_MOD:
+    set_type_of_current_command(CODE_MOD);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+```
