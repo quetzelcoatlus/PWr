@@ -502,7 +502,7 @@ void transform_tree_r(struct Command* c);
 ```
 Zatem w momencie wywołania otrzymuje wierzchołek drzewa wyprowadzenia i dla każdego rodzaju komendy będzie musiała wygenerować odpowiednie instrukcje kodu pośredniego używając rekurencji do przetwarzania dzieci komendy.  
 
-Rozpoczęcie transformacji wywołuję powyższą funkcję od korzenia drzewa wyprowadzenia:
+Rozpoczęcie transformacji odbywa się poprzez wywołanie powyższej funkcji z korzeniem drzewa wyprowadzenia jako argument:
 ```c
 void transform_tree_to_code(){   
     transform_tree_r(program);
@@ -516,7 +516,7 @@ switch(c->type){
 ```
 który w zależności od typu komendy wykona jakieś czynności. Wszystkie przypadki zostaną opisane w następujących podpodrozdziałach.
 
-#### 4.2.1 Blok komend
+#### 4.2.1. Blok komend
 ```c
 case COM_PROGRAM:
 case COM_COMMANDS:
@@ -528,7 +528,7 @@ case COM_COMMANDS:
 ```
 Blokiem komend może być, na przykład, cały program albo wnętrza pętli/instrukcji warunkowych. Jedyne, co musimy zrobić, to wywołać rekurencyjnie funkcję `transform_tree_r` dla każdego dziecka danej komendy (będzie to jednoznaczne z przetworzeniem każdej komendy tego bloku w dobrej kolejności.
 
-#### 4.2.2 Kopiowanie (Przypisanie)
+#### 4.2.2. Przypisanie
 ```c
 case COM_IS:
     add_code_command(CODE_COPY);
@@ -546,8 +546,8 @@ void add_code_command(enum CodeType type){
     if(codeProgram->size == codeProgram->maxSize)
         resize_code();
     
-    codeProgram->commands[codeProgram->size].type=type;
-    codeProgram->commands[codeProgram->size].size=0;
+    codeProgram->commands[codeProgram->size].type = type;
+    codeProgram->commands[codeProgram->size].size = 0;
     
     codeProgram->size++;
 }
@@ -555,7 +555,7 @@ void add_code_command(enum CodeType type){
 która jedynie dodaje pustą komendę o danym typie do dynamicznej tablicy (globalnej) `codeProgram` kodu pośredniego.  
 Następnie wywołujemy rekurencyjnie `transform_tree_r` dla dzieci komendy.
 
-#### 4.2.2 Zmienne, tablice, stałe
+#### 4.2.3. Zmienne, tablice, stałe
 Wiemy już jak dodać pustą komendę o danym typie, ale co w takim razie będzie jej argumentami? Jeśli dobrze pamiętasz, lekser zwracał dla każdej stałej lub identyfikatora jego indeks w tablicy symboli. W drzewie wyprowadzenia *liście* były tworzone przy pomocy funkcji `create_value_command` i również zawierały indeks z tablicy symboli. Tak samo będzie tutaj - wydobędziemy z komend drzewa wyprowadzenia indeksy i umieścimy je w kodzie pośrednim:
 
 ```c
@@ -590,7 +590,7 @@ void add_arg_to_current_command(int arg){
 ```
 która przypisuje argument w pierwsze wolne miejsce ostatniej komendy i zwiększa jej rozmiar.
 
-#### 4.2.3 Komendy READ, WRITE
+#### 4.2.4. Komendy READ, WRITE
 ```c
 case COM_READ:
     add_code_command(CODE_READ);
@@ -604,7 +604,7 @@ case COM_WRITE:
 ```
 `READ` i `WRITE` to proste, jednoargumentowe komendy, więc wystarczy dodać odpowiednią komendę i przetworzyć pierwszy argument.
 
-#### 4.2.4 Operacje matematyczne
+#### 4.2.5. Operacje matematyczne
 ```c
 case COM_ADD:
     set_type_of_current_command(CODE_ADD);
@@ -636,3 +636,16 @@ case COM_MOD:
     transform_tree_r(c->commands[1]);
     break;
 ```
+Operacje matematyczne, wspomniane wyżej w komendzie przypisania, różnią się od `READ` i `WRITE` tylko tym, że mają dwa argumenty. Zatem tworzymy dla nich komendy i przetwarzamy oboje dzieci.
+
+#### 4.2.6. Instrukcja warunkowa IF
+
+#### 4.2.8. Relacja
+
+#### 4.2.8. Instrukcja warunkowa IF-ELSE
+
+#### 4.2.9. Pętla WHILE
+
+#### 4.2.10. Pętla DO
+
+#### 4.2.11. Pętle FOR i FOR-DOWNTO
