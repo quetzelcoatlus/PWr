@@ -639,13 +639,120 @@ case COM_MOD:
 Operacje matematyczne, wspomniane wyżej w komendzie przypisania, różnią się od `READ` i `WRITE` tylko tym, że mają dwa argumenty. Zatem tworzymy dla nich komendy i przetwarzamy oboje dzieci.
 
 #### 4.2.6. Instrukcja warunkowa IF
+Jak było wspomniane we wstępie do tego rozdziału, w kodzie trójadresowym, żeby zbliżyć się do kodu asemblera, dodajemy własne skoki warunkowe: `JNEQ`, `JEQ`, `JGEQ`, `JLEQ`, `JGT`, `JLT`, które odpowiadają relacjom z języka wejściowego oraz etykiety, które są celami skoków. W celu zamienienia konstrukcji `IF condition THEN commands ENDIF` na skoki warunkowe i etykiety, najpierw zobrazujemy to w języku C. Rozważmy następujący program:
+```c
+#include <stdbool.h>
+#include <stdio.h>
 
-#### 4.2.8. Relacja
+int main(){
+	int a, b;
+	scanf("%d %d", &a, &b);
+	
+	bool condition = a <= b;
+	
+	if(condition){
+		printf("%d", a);
+    printf("<=");
+    printf("%d\n", b);
+  }
+	
+	return 0;
+}
+```
+Jego działanie jest proste:
+1. Wczytaj zmienne `a` i `b` typu całkowitego (scanf)
+2. Pod zmienną `condition` typu logicznego podstaw wynik relacji `a <= b`
+3. Jeżeli te liczby są w tej relacji, to wykonaj trzy instrukcje `printf`, które coś wypiszą
 
+Idea transformacji instrukcji warunkowej do kodu pośredniego jest następująca:
+Dla danego warunku `condition` i komend `commands` dodajemy skok warunkowy dla warunku przeciwnego, który będzie prowadzić do etykiety znajdującej się za blokiem komend. W języku C miałoby to postać:
+```c
+#include <stdbool.h>
+#include <stdio.h>
+
+int main(){
+	int a, b;
+	scanf("%d %d", &a, &b);
+	
+	bool condition = a <= b;
+	
+  if(!condition) goto label_false;
+  
+  printf("%d", a);
+  printf("<=");
+  printf("%d\n", b);
+    
+	label_false:
+	
+	return 0;
+}
+```
+Czyli: jeżeli warunek nie jest prawdziwy, to skocz za komendy, co poskutkuje niewykonaniem ich.  
+
+Mając tę wiedzę, możemy przeanalizować rzeczywisty przypadek w naszym kompilatorze:
+```c
+case COM_IF:
+    labelExit=label++;
+
+    add_code_command(CODE_UNKNOWN);
+    add_arg_to_current_command(labelTmp);
+    add_arg_to_current_command(NONE);  
+    
+    transform_tree_r(c->commands[0]);   //condition
+
+    transform_tree_r(c->commands[1]);   //commands
+    
+    add_label(labelExit);
+    break;
+```
+Dzieją się tu następujące rzeczy:
+1. Mamy zmienną globalną `label`, która posłuży nam do numerowania kolejnych etykiet. Ustawiamy wartość zmiennej lokalnej `labelExit` na wartość `label` i zwiększamy `label` o jeden.
+2. Będziemy teraz musieli rozpatrzeć warunek, więc musimy dodać komendę skoku. Jako że nie wiemy jeszcze, jaki to będzie skok, dodajemy komendę typu `CODE_UNKNOWN`, której pierwszym argumentem będzie cel, czyli etykieta `labelExit` (drugi argument równy NONE, dla konwencji).
+3. Następnie rekurencyjnie przetwarzamy warunek (omówienie tego procesu będzie w następnym podpodrozdziale).
+4. Przetwarzamy wszystkie komendy, które należą do tej instrukcji warunkowej.
+5. Po komendach dodajemy etykietę `labelExit` przy pomocy funkcji `add_label`
+
+Funkcja `add_label` jest bardzo podobna do `add_code_command`:
+```c
+void add_label(int label){
+    if(codeProgram->size == codeProgram->maxSize)
+        resize_code();
+    
+    codeProgram->commands[codeProgram->size].type = CODE_LABEL;
+    codeProgram->commands[codeProgram->size].size = 1;
+    codeProgram->commands[codeProgram->size].args[0] = label;
+
+    codeProgram->size++;
+}
+```
+Tworzy ona komendę o typie `CODE_LABEL` i ustawia jej pierwszy argument na `label`.
+
+#### 4.2.8. Warunki
+Przetworzenie komendy warunku ma za zadanie zmienić typ obecnej instrukcji kodu pośredniego na skok warunkowy o warunku przeciwnym niż komenda oraz przetworzyć dzieci. Można by to zrobić ręcznie zamieniając dla każdej komendy, ale ja zrobiłem to (być może) *sprytniej*:
+```c
+case COM_EQ:
+case COM_NEQ:
+case COM_LT:
+case COM_GT:
+case COM_LEQ:
+case COM_GEQ:
+    set_type_of_current_command(c->type - COM_EQ + CODE_JNEQ);
+    transform_tree_r(c->commands[0]);
+    transform_tree_r(c->commands[1]);
+    break;
+```
+Poprzez odpowiednie ułożenie enumów (na odpowiadających pozycjach `Komenda - Kod` znajdują się przeciwne warunki) można to zrobić sztuczką algebraiczną (wszak typ enum to jedynie *nakładka* na typ `int`): `c->type - COM_EQ + CODE_JNEQ`.  
+
+Funkcja `set_type_of_current_command` robi dokładnie to, co oznacza, czyli zmienia typ obecnej instrukcji na dany:
+```c
+void set_type_of_current_command(enum CodeType type){
+    codeProgram->commands[codeProgram->size-1].type=type;
+}
+```
 #### 4.2.8. Instrukcja warunkowa IF-ELSE
 
 #### 4.2.9. Pętla WHILE
 
 #### 4.2.10. Pętla DO
 
-#### 4.2.11. Pętle FOR i FOR-DOWNTO
+#### 4.2.11. Pętle FOR i FOR-DOWN
