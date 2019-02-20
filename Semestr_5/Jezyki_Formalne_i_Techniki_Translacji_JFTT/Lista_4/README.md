@@ -645,7 +645,7 @@ Jak było wspomniane we wstępie do tego rozdziału, w kodzie trójadresowym, ż
 #include <stdio.h>
 
 int main(){
-int a, b;
+    int a, b;
     scanf("%d %d", &a, &b);
 
     bool condition = a <= b;
