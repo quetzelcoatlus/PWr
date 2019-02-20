@@ -645,18 +645,18 @@ Jak było wspomniane we wstępie do tego rozdziału, w kodzie trójadresowym, ż
 #include <stdio.h>
 
 int main(){
-	int a, b;
-	scanf("%d %d", &a, &b);
+int a, b;
+    scanf("%d %d", &a, &b);
 
-	bool condition = a <= b;
+    bool condition = a <= b;
 
-	if(condition){
-		printf("%d", a);
-		printf("<=");
-		printf("%d\n", b);
-  	}
-	
-	return 0;
+    if(condition){
+        printf("%d", a);
+        printf("<=");
+        printf("%d\n", b);
+    }
+
+    return 0;
 }
 ```
 Jego działanie jest proste:
@@ -671,20 +671,20 @@ Dla danego warunku `condition` i komend `commands` dodajemy skok warunkowy dla w
 #include <stdio.h>
 
 int main(){
-	int a, b;
-	scanf("%d %d", &a, &b);
-	
-	bool condition = a <= b;
-	
-  	if(!condition) goto label_false;
+    int a, b;
+    scanf("%d %d", &a, &b);
 
-  	printf("%d", a);
-  	printf("<=");
-  	printf("%d\n", b);
-    
-	label_false:
-	
-	return 0;
+    bool condition = a <= b;
+
+    if(!condition) goto label_false;
+
+    printf("%d", a);
+    printf("<=");
+    printf("%d\n", b);
+
+    label_false:
+
+    return 0;
 }
 ```
 Czyli: jeżeli warunek nie jest prawdziwy, to skocz za komendy, co poskutkuje niewykonaniem ich.  
