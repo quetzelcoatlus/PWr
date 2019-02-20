@@ -756,3 +756,4 @@ void set_type_of_current_command(enum CodeType type){
 #### 4.2.10. Pętla DO
 
 #### 4.2.11. Pętle FOR i FOR-DOWN
+
