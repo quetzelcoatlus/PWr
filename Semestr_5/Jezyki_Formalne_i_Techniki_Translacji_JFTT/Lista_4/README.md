@@ -647,14 +647,14 @@ Jak było wspomniane we wstępie do tego rozdziału, w kodzie trójadresowym, ż
 int main(){
 	int a, b;
 	scanf("%d %d", &a, &b);
-	
+
 	bool condition = a <= b;
-	
+
 	if(condition){
 		printf("%d", a);
-    printf("<=");
-    printf("%d\n", b);
-  }
+		printf("<=");
+		printf("%d\n", b);
+  	}
 	
 	return 0;
 }
@@ -676,11 +676,11 @@ int main(){
 	
 	bool condition = a <= b;
 	
-  if(!condition) goto label_false;
-  
-  printf("%d", a);
-  printf("<=");
-  printf("%d\n", b);
+  	if(!condition) goto label_false;
+
+  	printf("%d", a);
+  	printf("<=");
+  	printf("%d\n", b);
     
 	label_false:
 	
