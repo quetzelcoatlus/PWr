@@ -21,6 +21,9 @@ Witaj, drogi czytelniku. Jeśli tu dotarłeś, to albo interesuje Cię temat kom
 7. [Optymalizacje](#7-optymalizacje)
 
 
+## 1. Specyfikacja kompilatora
+(TBA)
+
 ## 2. Analiza leksykalna
 Analiza leksykalna ma dwa główne cele:
 1. Rozpoznać słowa kluczowe oraz symbole języka wejściowego i zwrócić odpowiadające im tokeny.
