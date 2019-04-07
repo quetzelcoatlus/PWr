@@ -1,1 +1,1 @@
-Powłoka systemowa. Po uruchomieniu można wywoływać programy, przekierowywać wejście i wyjście, uruchamiać proces w tle i takie tam. 
+Powłoka systemowa. Po uruchomieniu można wywoływać programy, przekierowywać wejście i wyjście, uruchamiać proces w tle i używać potoków.
