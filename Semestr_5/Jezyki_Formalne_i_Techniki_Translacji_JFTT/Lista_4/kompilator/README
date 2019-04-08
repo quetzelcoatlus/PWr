@@ -1,0 +1,31 @@
+Oto mój kompilator, napisany w języku C, zgodny ze standardem C99, używający
+dwóch funkcji ze standardu POSIX.1-2001: strdup oraz fileno, a także biblioteki
+IMath (https://github.com/creachadair/imath) do operacji na dużych liczbach.
+
+Aby skompilować program, należy użyć polecenia:
+    $ make
+
+Użycie kompilatora jest zgodne ze specyfikacją, tj.:
+    $ ./kompilator <plik wejściowy> <plik wyjściowy>
+
+Program był kompilowany i testowany przy użyciu następujących narzędzi:
+ gcc (GCC) 8.2.1 20181127
+ flex 2.6.4
+ bison (GNU Bison) 3.2
+ 
+Zawartość archiwum powinna być następująca (nazwa | opis | md5sum):
+ Makefile      | Automatyczna kompilacja    | 66022ed2825b871fab080f36f48e78ff
+ comp_lexer.l  | Lekser (Flex)              | a975d6320156b77d5e6b4e7e936c1335
+ comp_parser.y | Parser (Bison)             | df4e6b9570a9cf8ed04984e95256dac4
+ comp_lib.c    | Glówna biblioteka programu | 3b168251fec9bcc7a001e2c7a4b31bb1
+ comp_lib.h    | Plik nagłówkowy biblioteki | 64d3fe4f2151db308da3ccc9b7d32cb6
+ imath.c       | Biblioteka do dużych liczb | a87ff218764dd72a8c069a81ff16e22f
+ imath.h       | Plik nagłówkowy biblioteki | 32c7460ee7aa8480235b26de4ff2c4c8
+ main.c        | Funkcja main programu      | 6aaf37473dbf7c2c659a1b41a7ad5122
+ README        | Instrukcja obsługi         | Nie ma z przyczyn oczywistych :)
+
+                                                            ------------------
+                                                            | 27 I 2019      |
+                                                            | Jan Brzeżański |
+                                                            | 236814         |
+                                                            ------------------
